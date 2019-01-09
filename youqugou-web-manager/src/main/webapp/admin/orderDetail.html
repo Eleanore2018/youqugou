@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <title>订单详情</title>
+     <link rel="icon" href="assets/img/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="../css/webbase.css" />
+    <link rel="stylesheet" type="text/css" href="../css/pages-seckillOrder.css" />
+
+
+    <!-- 引入angular的js -->
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+    <!-- 分页组件开始 -->
+    <script src="../plugins/angularjs/pagination.js"></script>
+    <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
+    <!-- 分页组件结束 -->
+
+    <script type="text/javascript" src="../js/base_pagination.js"></script>
+    <script type="text/javascript" src="../js/controller/baseController.js"></script>
+    <script src="../js/controller/orderController.js"></script>
+    <script src="../js/service/orderService.js"></script>
+
+
+</head>
+
+<body ng-app="youqugou" ng-controller="orderController" ng-init="selectOrderItemById()">
+    <!-- 头部栏位 -->
+    <!--页面顶部-->
+<script type="text/javascript" src="../js/plugins/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../js/plugins/jquery.easing/jquery.easing.min.js"></script>
+<script type="text/javascript" src="../js/plugins/sui/sui.min.js"></script>
+<script type="text/javascript" src="../js/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
+<script type="text/javascript" src="../js/widget/nav.js"></script>
+</body>
+    <!--header-->
+    <div id="account">
+        <div class="py-container">
+            <div class="yui3-g home">
+                <!--右侧主内容-->
+                <div class="yui3-u-5-6">
+                    <div class="body">
+                        <div class="order-info">
+                            <h5>订单信息</h5>
+                            <p>收货地址：{{entity2.addr}} </p>
+                            <p>订单单号：{{entity2.orderIdStr}}</p>
+                            <p>下单时间：{{entity2.createTime}}</p>
+                            <p>支付时间：{{entity2.paymentTime}}</p>
+                            <p>支付方式：{{entity2.paymentType}}</p>
+                            <p>发货时间：{{entity2.congignTime}}</p>
+                        </div>
+                        <div class="order-goods">
+                            <table class="sui-table">
+                                    <thead>
+                                        <th class="center" >商品</th>
+                                        <th class="center" >价格</th>
+                                        <th class="center" >数量</th>
+                                        <th class="center" >优惠</th>
+                                        <th class="center" >状态</th>
+                                    </thead>
+
+                                <tbody>
+                                    <tr>
+                                        <td colspan="5">订单编号：{{entity2.orderItem.idStr}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="typographic"><img src="{{entity2.orderItem.picPath}}"  width="50px" height="px"/>
+                                                    <span>{{entity2.orderItem.goodsName}}</span>
+                                                    <span class="guige">规格：{{entity.orderItem.specStr}}</span>
+                                                </div>
+                                        </td>
+                                        <td>
+                                            <ul class="unstyled">
+                                                    <li>¥{{entity2.orderItem.price}}</li>
+                                                </ul>
+                                        </td>
+                                        <td>{{entity2.orderItem.num}}</td>
+                                        <td>无优惠</td>
+                                        <td>{{status[entity2.orderItem.status]}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="order-price">
+                                <p>商品总金额：￥{{entity2.orderItem.totalFee}}</p>
+                                <p>运费金额：，免费用</p>
+                                <p>使用优惠券：无</p>
+                                <h4 class="red">实际支付：￥{{entity2.orderItem.totalFee}}</h4>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <!--猜你喜欢-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 底部栏位 -->
+
+</html>
