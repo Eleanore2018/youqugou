@@ -1,11 +1,6 @@
 //服务层
 app.service('itemCatService',function($http){
 
-    this.searchItemCat = function (currentPage, itemsPerPage, searchEntity) {
-        return $http.post("../itemCat/searchItemCat.do?pageNum=" + currentPage
-            + "&pageSize=" + itemsPerPage, searchEntity);
-    }
-
     //读取列表数据绑定到表单中
     this.selectAllItemCats=function(){
         return $http.get('../itemCat/selectAllItemCats.do');

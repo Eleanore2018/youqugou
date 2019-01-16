@@ -1,7 +1,6 @@
 package cn.itcast.core.service;
 
 import cn.itcast.core.entity.PageResult;
-import cn.itcast.core.entity.Result;
 import cn.itcast.core.pojo.good.Goods;
 import cn.itcast.core.pojogroup.GoodsVo;
 

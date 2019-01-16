@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,21 +83,58 @@ public class ItemCatServiceImpl implements ItemCatService {
         return itemCatDao.selectByExample(null);
     }
 
+    //-------------------------------
+    @Override
+    public List<Map> selectItemCatsMapByParentId(Long parentId) {
+        List<Map> maps = itemCatDao.selectItemCatsMapByParentId(parentId);
+        // 手动添加一个id为0的map项表示不选
+        Map map = new HashMap();
+        map.put("id", 0);
+        map.put("text", "不选择");
+        maps.add(map);
+        return maps;
+    }
+
     /**
-     * 王浩宇修改2018/12/29
+     * 查询商城首页分类信息
+     * @author 陈伟鑫
+     * @Date 12.29
      * @param parentId
      * @return
      */
-    //----------------------------
     @Override
-    public List<Map> selectItemCatsMapByParentId(Long parentId) {
-//        List<Map> maps = itemCatDao.selectItemCatsMapByParentId(parentId);
-//        // 手动添加一个id为0的map项表示不选
-//        Map map = new HashMap();
-//        map.put("id", 0);
-//        map.put("text", "不选择");
-//        maps.add(map);
-        return null;
+    public List<ItemCat> findAllItemCat(Long parentId) {
+        //先从缓存中查询数据
+        List<ItemCat> itemCatList = (List<ItemCat>) redisTemplate.boundValueOps("itemCatList").get();
+        //判断缓存中是否有数据
+        if (null == itemCatList || itemCatList.size() == 0) {
+            //缓存中没有数据,从数据库查询
+            ItemCatQuery itemCatQuery = new ItemCatQuery();
+            ItemCatQuery.Criteria criteria = itemCatQuery.createCriteria();
+            criteria.andParentIdEqualTo(parentId);
+            //查询出一级分类
+            itemCatList = itemCatDao.selectByExample(itemCatQuery);
+            //遍历一级分类
+            for (ItemCat itemCat : itemCatList) {
+                ItemCatQuery itemCatQuery1 = new ItemCatQuery();
+                ItemCatQuery.Criteria criteria1 = itemCatQuery1.createCriteria();
+                criteria1.andParentIdEqualTo(itemCat.getId());
+                List<ItemCat> itemCatList1 = itemCatDao.selectByExample(itemCatQuery1);
+                //将查询出的二级分类注入到一级分类的itemCat对象中
+                itemCat.setItemCatList(itemCatList1);
+                //遍历二级分类集合,查询三级分类
+                for (ItemCat itemCat1 : itemCatList1) {
+                    ItemCatQuery itemCatQuery2 = new ItemCatQuery();
+                    ItemCatQuery.Criteria criteria2 = itemCatQuery2.createCriteria();
+                    criteria2.andParentIdEqualTo(itemCat1.getId());
+                    List<ItemCat> itemCatList2 = itemCatDao.selectByExample(itemCatQuery2);
+                    //将查询出的三届分类注入到二级分类的itemCat对象中
+                    itemCat1.setItemCatList(itemCatList2);
+                }
+            }
+            //将查询出的数据放到缓存中
+            redisTemplate.boundValueOps("itemCatList").set(itemCatList);
+        }
+        return itemCatList;
     }
-    //-------------------------------
 }

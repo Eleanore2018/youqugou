@@ -23,6 +23,32 @@ public class CartController {
     @Reference
     private CartService cartService;
 
+
+    /**
+     * 添加购物车中的商品到我的收藏中
+     * @zuojianzhou
+     * @return
+     */
+    @RequestMapping("/addCollect")
+    public Result addCollect(Long itemId){
+        try {
+
+            // 判断用户是否登录
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            // 未登录时会生成一个匿名用户,匿名用户默认为anonymousUser
+            if (!"anonymousUser".equals(username)) {
+                //若果已经登录,则进行保存
+                cartService.addCollect(itemId,username);
+            }else{
+                return new Result(false,"请登录");
+            }
+            return new Result(true,"添加成功5555");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"添加失败");
+        }
+    }
+
     /**
      * 添加购物车
      * @param itemId

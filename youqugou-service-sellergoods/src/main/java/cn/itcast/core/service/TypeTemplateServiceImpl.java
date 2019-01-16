@@ -103,11 +103,8 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
         return maps;
     }
 
-
     @Override
     public List<Map> selectAllTypeTemplatesMap() {
-
         return typeTemplateDao.selectAllTypeTemplatesMap();
     }
-
 }

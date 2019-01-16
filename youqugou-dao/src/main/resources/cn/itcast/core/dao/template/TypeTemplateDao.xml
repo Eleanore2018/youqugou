@@ -7,7 +7,10 @@
     <result column="spec_ids" property="specIds" jdbcType="VARCHAR" />
     <result column="brand_ids" property="brandIds" jdbcType="VARCHAR" />
     <result column="custom_attribute_items" property="customAttributeItems" jdbcType="VARCHAR" />
-    <result column="status" property="status"  jdbcType="VARCHAR" />
+
+    <!--添加status字段 -贾运通2018/12/31-->
+    <result column="status" property="status" jdbcType="VARCHAR" />
+
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -67,9 +70,11 @@
       </foreach>
     </where>
   </sql>
+
+  <!--添加status字段-->
   <sql id="Base_Column_List" >
     <if test="fields == null" >
-      id, name, spec_ids, brand_ids, custom_attribute_items,status
+      id, name, spec_ids, brand_ids, custom_attribute_items, status
     </if>
     <if test="fields != null" >
       ${fields}
@@ -110,10 +115,9 @@
   </delete>
   <insert id="insert" parameterType="cn.itcast.core.pojo.template.TypeTemplate" >
     insert into tb_type_template (id, name, spec_ids, 
-      brand_ids, custom_attribute_items,status
-      )
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{specIds,jdbcType=VARCHAR}, 
-      #{brandIds,jdbcType=VARCHAR}, #{customAttributeItems,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR})
+      brand_ids, custom_attribute_items,status)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{specIds,jdbcType=VARCHAR},
+      #{brandIds,jdbcType=VARCHAR}, #{customAttributeItems,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.itcast.core.pojo.template.TypeTemplate" >
     insert into tb_type_template
@@ -133,7 +137,7 @@
       <if test="customAttributeItems != null" >
         custom_attribute_items,
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         status,
       </if>
     </trim>
@@ -153,7 +157,7 @@
       <if test="customAttributeItems != null" >
         #{customAttributeItems,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         #{status,jdbcType=VARCHAR},
       </if>
     </trim>
@@ -182,7 +186,7 @@
       <if test="record.customAttributeItems != null" >
         custom_attribute_items = #{record.customAttributeItems,jdbcType=VARCHAR},
       </if>
-      <if test="record.status != null">
+      <if test="record.status != null" >
         status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
@@ -217,7 +221,8 @@
       <if test="customAttributeItems != null" >
         custom_attribute_items = #{customAttributeItems,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
+--       添加status字段
+      <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
       </if>
     </set>
@@ -229,7 +234,7 @@
       spec_ids = #{specIds,jdbcType=VARCHAR},
       brand_ids = #{brandIds,jdbcType=VARCHAR},
       custom_attribute_items = #{customAttributeItems,jdbcType=VARCHAR},
-      status = #{status,jdbcType=VARCHAR}
+       status = #{status,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

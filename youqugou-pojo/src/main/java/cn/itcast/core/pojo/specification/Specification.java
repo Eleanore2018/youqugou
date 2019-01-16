@@ -13,7 +13,18 @@ public class Specification implements Serializable {
      */
     private String specName;
 
+    /*贾运通*/
     private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    /*结束*/
+
 
     private static final long serialVersionUID = 1L;
 
@@ -33,14 +44,7 @@ public class Specification implements Serializable {
         this.specName = specName == null ? null : specName.trim();
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
-    }
-
+    /*添加status字段--2018/12/31*/
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

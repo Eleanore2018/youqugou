@@ -19,14 +19,14 @@ public class TypeTemplateController {
     @Reference
     private TypeTemplateService typeTemplateService;
 
-    @RequestMapping("/selectTypeTemplateById")
-    public TypeTemplate selectTypeTemplateById(Long id) {
-        return typeTemplateService.selectTypeTemplateById(id);
-    }
-
     @RequestMapping("/searchTypeTemplate")
     public PageResult searchTypeTemplate(Integer pageNum, Integer pageSize, @RequestBody TypeTemplate typeTemplate) {
         return typeTemplateService.searchTypeTemplate(pageNum, pageSize, typeTemplate);
+    }
+
+    @RequestMapping("/selectTypeTemplateById")
+    public TypeTemplate selectTypeTemplateById(Long id) {
+        return typeTemplateService.selectTypeTemplateById(id);
     }
 
     @RequestMapping("/updateTypeTemplate")

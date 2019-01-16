@@ -107,6 +107,14 @@
     from tb_goods
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <!--
+    Author: Mr Liu
+    Date: 2019/1/2 08:18
+    use to select category1Id by primaryKey
+  -->
+  <select id="selectcategory1IdByPrimaryKey" parameterType="long" resultType="long">
+    select category1_id from tb_goods where id = #{goodsId}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from tb_goods
     where id = #{id,jdbcType=BIGINT}
@@ -131,7 +139,7 @@
       #{price,jdbcType=DECIMAL}, #{typeTemplateId,jdbcType=BIGINT}, #{isEnableSpec,jdbcType=VARCHAR}, 
       #{isDelete,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="cn.itcast.core.pojo.good.Goods" >
+  <insert id="insertSelective" parameterType="cn.itcast.core.pojo.good.Goods" useGeneratedKeys="true" keyProperty="id" >
     insert into tb_goods
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

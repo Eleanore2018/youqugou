@@ -4,6 +4,7 @@ import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.pojo.ad.Content;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ContentService {
 
@@ -20,5 +21,7 @@ public interface ContentService {
     public void delAll(Long[] ids);
 
     List<Content> selectContentsByCategoryId(Long categoryId);
+
+    Map<String,Map> findFloorContent(Long[] contentCategory);
 }
 

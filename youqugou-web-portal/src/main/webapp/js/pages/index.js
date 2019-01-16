@@ -26,12 +26,15 @@ function scrollFloorView(){
 	if(ling > 1200) {
 		$("#floor-index").show(); //如果滚动的距离大于1200，滚动框显示出来
 	}
-	if(1200 < ling && ling < 1600) { //第一层的数字隐藏，文字显示，其他兄弟元素的li数字显示，文字隐藏
-		$("#floor-index ul li").eq(0).find(".num").hide().siblings(".word").css("display", "block");
-		$("#floor-index ul li").eq(0).siblings("li").find(".num").css("display", "block").siblings(".word").hide();
-	} else if(ling < 1800) {
-		$("#floor-index ul li").eq(1).find(".num").hide().siblings(".word").css("display", "block");
-		$("#floor-index ul li").eq(1).siblings("li").find(".num").css("display", "block").siblings(".word").hide();
+    if(1200 < ling && ling < 1600) { //第一层的数字隐藏，文字显示，其他兄弟元素的li数字显示，文字隐藏
+        $("#floor-index ul li").eq(0).find(".num").hide().siblings(".word").css("display", "block");
+        $("#floor-index ul li").eq(0).siblings("li").find(".num").css("display", "block").siblings(".word").hide();
+    } else if(1600 < ling && ling < 1800) {
+        $("#floor-index ul li").eq(1).find(".num").hide().siblings(".word").css("display", "block");
+        $("#floor-index ul li").eq(1).siblings("li").find(".num").css("display", "block").siblings(".word").hide();
+    } else if(1800 < ling && ling < 2000) {
+        $("#floor-index ul li").eq(2).find(".num").hide().siblings(".word").css("display", "block");
+        $("#floor-index ul li").eq(2).siblings("li").find(".num").css("display", "block").siblings(".word").hide();
 	}
 	if(ling > 2500 || ling < 1200) {
 		$("#floor-index").hide();

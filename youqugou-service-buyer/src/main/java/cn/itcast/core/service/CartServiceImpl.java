@@ -1,7 +1,9 @@
 package cn.itcast.core.service;
 
+import cn.itcast.core.dao.collect.CollectDao;
 import cn.itcast.core.dao.item.ItemDao;
 import cn.itcast.core.pojo.Cart;
+import cn.itcast.core.pojo.Collect;
 import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.order.OrderItem;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -18,6 +20,8 @@ public class CartServiceImpl implements CartService {
     private ItemDao itemDao;
     @Autowired
     private RedisTemplate redisTemplate;
+    @Autowired
+    private CollectDao collectDao;
 
     /**
      * 构建购物车项
@@ -117,5 +121,24 @@ public class CartServiceImpl implements CartService {
     @Override
     public List<Cart> selectCartsFromRedis(String username) {
         return fillCarts((List<Cart>) redisTemplate.boundHashOps("cart").get(username));
+    }
+
+    @Override
+    public void addCollect(Long itemId,String username) {
+
+        Collect collect = new Collect();
+        Item item = itemDao.selectByPrimaryKey(itemId);
+        //商品ID
+        collect.setItemId(itemId);
+        //商品标题
+        collect.setTitle(item.getTitle());
+        //商品图片
+        collect.setImage(item.getImage());
+        //商品价格
+        collect.setPrice(item.getPrice());
+        //用户名称
+        collect.setUserName(username);
+
+        collectDao.insertSelective(collect);
     }
 }

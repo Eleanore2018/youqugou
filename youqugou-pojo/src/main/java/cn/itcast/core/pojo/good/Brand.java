@@ -1,6 +1,7 @@
 package cn.itcast.core.pojo.good;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Brand implements Serializable {
     private Long id;

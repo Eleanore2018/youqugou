@@ -25,9 +25,23 @@ public class TypeTemplate implements Serializable {
      */
     private String customAttributeItems;
 
+    private static final long serialVersionUID = 1L;
+
+
+    /**
+     * 添加status字段- 贾运通-2018/12/31
+     */
     private String status;
 
-    private static final long serialVersionUID = 1L;
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    /*结束*/
+
 
     public Long getId() {
         return id;
@@ -69,14 +83,8 @@ public class TypeTemplate implements Serializable {
         this.customAttributeItems = customAttributeItems == null ? null : customAttributeItems.trim();
     }
 
-    public String getStatus() {
-        return status;
-    }
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
-    }
-
+    /*添加status字段*/
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -88,8 +96,8 @@ public class TypeTemplate implements Serializable {
         sb.append(", specIds=").append(specIds);
         sb.append(", brandIds=").append(brandIds);
         sb.append(", customAttributeItems=").append(customAttributeItems);
-        sb.append(", status=").append(status);
         sb.append(", serialVersionUID=").append(serialVersionUID);
+        sb.append(", status=").append(status);
         sb.append("]");
         return sb.toString();
     }

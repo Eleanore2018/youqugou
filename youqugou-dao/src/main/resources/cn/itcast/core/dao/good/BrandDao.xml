@@ -110,7 +110,7 @@
   <insert id="insert" parameterType="cn.itcast.core.pojo.good.Brand" >
     insert into tb_brand (id, name, first_char, 
       sellerName, status)
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{firstChar,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{firstChar,jdbcType=VARCHAR},
       #{sellername,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.itcast.core.pojo.good.Brand" >

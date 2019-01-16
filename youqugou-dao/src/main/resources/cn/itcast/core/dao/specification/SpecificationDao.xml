@@ -4,6 +4,8 @@
   <resultMap id="BaseResultMap" type="cn.itcast.core.pojo.specification.Specification" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="spec_name" property="specName" jdbcType="VARCHAR" />
+
+    <!--添加status字段-贾运通-2018/12/31-->
     <result column="status" property="status" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -64,9 +66,10 @@
       </foreach>
     </where>
   </sql>
+  <!--添加status字段-->
   <sql id="Base_Column_List" >
     <if test="fields == null" >
-      id, spec_name,status
+      id, spec_name, status
     </if>
     <if test="fields != null" >
       ${fields}
@@ -86,6 +89,7 @@
       order by ${orderByClause}
     </if>
   </select>
+  <!--添加status字段-贾运通2018/12/31-->
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     id,spec_name,status
@@ -108,7 +112,7 @@
   </delete>
   <insert id="insert" parameterType="cn.itcast.core.pojo.specification.Specification" >
     insert into tb_specification (id, spec_name,status)
-    values (#{id,jdbcType=BIGINT}, #{specName,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR})
+    values (#{id,jdbcType=BIGINT}, #{specName,jdbcType=VARCHAR},#{sattus,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.itcast.core.pojo.specification.Specification" useGeneratedKeys="true" keyProperty="id">
     insert into tb_specification
@@ -119,7 +123,7 @@
       <if test="specName != null" >
         spec_name,
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         status,
       </if>
     </trim>
@@ -130,7 +134,7 @@
       <if test="specName != null" >
         #{specName,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         #{status,jdbcType=VARCHAR},
       </if>
     </trim>
@@ -150,7 +154,7 @@
       <if test="record.specName != null" >
         spec_name = #{record.specName,jdbcType=VARCHAR},
       </if>
-      <if test="record.status != null">
+      <if test="record.status != null" >
         status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
@@ -161,19 +165,20 @@
   <update id="updateByExample" parameterType="map" >
     update tb_specification
     set id = #{record.id,jdbcType=BIGINT},
-      spec_name = #{record.specName,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=VARCHAR}
+      status = #{record.status,jdbcType=VARCHAR},
+      spec_name = #{record.specName,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
+  <!--添加status字段-->
   <update id="updateByPrimaryKeySelective" parameterType="cn.itcast.core.pojo.specification.Specification" >
     update tb_specification
     <set >
       <if test="specName != null" >
         spec_name = #{specName,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
+      <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
       </if>
     </set>
@@ -181,8 +186,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.itcast.core.pojo.specification.Specification" >
     update tb_specification
-    set spec_name = #{specName,jdbcType=VARCHAR},
-    status = #{status,jdbcType=VARCHAR}
+    set spec_name = #{specName,jdbcType=VARCHAR}
+        status = #{status,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -28,4 +28,10 @@ app.service("brandService", function ($http) {
     this.selectAllBrandMap = function () {
         return $http.get("../brand/selectAllBrandMap.do");
     }
+
+    /*贾运通2018/12/28*/
+    //审核
+    this.updateStatus = function(ids,status){
+        return $http.get('../brand/updateStatus.do?ids='+ids+"&status="+status);
+    }
 });

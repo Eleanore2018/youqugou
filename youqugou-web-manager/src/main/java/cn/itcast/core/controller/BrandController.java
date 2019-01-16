@@ -44,7 +44,14 @@ public class BrandController {
     /**
      * 插入数据
      */
-
+    @RequestMapping("/insertBrand")
+    public Result insertBrand(@RequestBody Brand brand) {
+        int row = brandService.insertBrand(brand);
+        if (row > 0) {
+            return new Result(true, "保存成功");
+        }
+        return new Result(false, "保存失败");
+    }
 
     /**
      * 修改brand
@@ -90,6 +97,20 @@ public class BrandController {
     @RequestMapping("/searchBrand")
     public PageResult searchBrand(Integer pageNum, Integer pageSize, @RequestBody Brand brand,String name) {
         return brandService.searchBrand(pageNum, pageSize, brand,name);
+    }
+
+
+    /*贾运通*/
+    //品牌审核
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(Long[] ids, String status) {
+        try {
+            brandService.updateStatus(ids,status);
+            return new Result(true,"成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"失败");
+        }
     }
 }
 
