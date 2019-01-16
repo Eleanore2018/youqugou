@@ -29,6 +29,9 @@ public class TypeTemplateAuditServiceImpl implements TypeTemplateAuditService {
         TypeTemplateQuery.Criteria criteria = typeTemplateQuery.createCriteria();
         criteria.andStatusEqualTo("0");//只查询未审核的
         if (null != typeTemplate.getName() && !"".equals(typeTemplate.getName().trim())) {
+            if (typeTemplate.getName().contains(" ")){
+                typeTemplate.setName(typeTemplate.getName().replace(" ",""));
+            }
             criteria.andNameLike("%" + typeTemplate.getName().trim() + "%");
         }
         Page<TypeTemplate> page = (Page<TypeTemplate>) typeTemplateDao.selectByExample(typeTemplateQuery);

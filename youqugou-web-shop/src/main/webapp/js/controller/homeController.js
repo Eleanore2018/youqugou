@@ -17,7 +17,7 @@ app.controller("homeController", function ($scope, $controller, homeService) {
     // 设置年集合
     $scope.years = [];
     $scope.$watch("entity", function (newValue, oldValue) {
-        if ($scope.entity !== false) {
+        if ($scope.entity !== false) { // Number($scope.entity) !== 0
             var oldYear = $scope.entity[0]; // 商家创建时的年份
             var oldMonth = $scope.entity[1]; // 商家创建时的月份
             var oldDate = $scope.entity[2]; // 商家创建时的日期

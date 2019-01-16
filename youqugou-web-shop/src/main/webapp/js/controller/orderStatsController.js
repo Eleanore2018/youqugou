@@ -7,7 +7,7 @@ app.controller('orderStatsController', function ($scope, orderStatsService, home
 
     });
 
-    // 定义一个存储优趣购上线的时间
+    // 定义一个存储商家注册的时间
     $scope.entity = [];
     $scope.searchTime = function () {
 
@@ -76,86 +76,94 @@ app.controller('orderStatsController', function ($scope, orderStatsService, home
 
     $scope.$watch("timeBucket", function (newValue, oldValue) {
         // 销量折线图
-        $scope.pieChart = {};
-        $scope.pieChart.itemNameList = [];
-        $scope.pieChart.paymentsList = [];
+        $scope.pieChart = [];
         if (JSON.stringify(newValue) !== '{}' && newValue != null) {
             orderStatsService.getSalesByCategory($scope.year, $scope.month, $scope.timeBucket).success(function (response) {
                 $scope.pieChart = response;
-                $scope.pieChart.itemNameList = response.itemNameList;
-                $scope.pieChart.paymentsList = response.paymentsList;
             })
         }
     });
 
-    $scope.$watch("pieChart.paymentsList", function (newValue, oldValue) {
+    $scope.$watch("pieChart", function (newValue, oldValue) {
         // 判断数组不为空
         if (newValue !== false) {
-            // 销量饼状图
             var data = genData();
-
             var pieOption = {
+                backgroundColor: '#2c343c',
+
                 title: {
-                    text: 'Pie chart of business sales',
-                    x: 'left'
+                    text: '商品销售额饼状图',
+                    left: 'center',
+                    top: 20,
+                    textStyle: {
+                        color: '#ccc'
+                    }
                 },
-                tooltip: {
+
+                tooltip : {
                     trigger: 'item',
                     formatter: "{a} <br/>{b} : {c} ({d}%)"
                 },
-                legend: {
-                    type: 'scroll',
-                    orient: 'vertical',
-                    right: 10,
-                    top: 20,
-                    bottom: 20,
-                    data: data.legendData,
-                    selected: data.selected
+
+                visualMap: {
+                    show: false,
+                    min: 80,
+                    max: 600,
+                    inRange: {
+                        colorLightness: [0, 1]
+                    }
                 },
-                series: [
+                series : [
                     {
-                        name: '商品销售额',
-                        type: 'pie',
-                        radius: '55%',
-                        center: ['40%', '50%'],
-                        data: data.seriesData,
+                        name:'商品销售额',
+                        type:'pie',
+                        radius : '55%',
+                        center: ['50%', '50%'],
+                        data:data.sort(function (a, b) { return a.value - b.value; }),
+                        roseType: 'radius',
+                        label: {
+                            normal: {
+                                textStyle: {
+                                    color: 'rgba(255, 255, 255, 0.3)'
+                                }
+                            }
+                        },
+                        labelLine: {
+                            normal: {
+                                lineStyle: {
+                                    color: 'rgba(255, 255, 255, 0.3)'
+                                },
+                                smooth: 0.2,
+                                length: 10,
+                                length2: 20
+                            }
+                        },
                         itemStyle: {
-                            emphasis: {
-                                shadowBlur: 10,
-                                shadowOffsetX: 0,
+                            normal: {
+                                color: '#c23531',
+                                shadowBlur: 200,
                                 shadowColor: 'rgba(0, 0, 0, 0.5)'
                             }
+                        },
+
+                        animationType: 'scale',
+                        animationEasing: 'elasticOut',
+                        animationDelay: function (idx) {
+                            return Math.random() * 200;
                         }
                     }
                 ]
             };
-            function genData() {
-                // 饼状图右侧显示的数据
-                var legendData = [];
-                // 饼状图显示的数据
-                var seriesData = [];
-                // 表示选中的条数,里面存储的是name
-                var selected = {};
-                for (var i = 0; i < $scope.pieChart.itemNameList.length; i++) {
-                    seriesData.push({
-                        name: $scope.pieChart.itemNameList[i],
-                        value: $scope.pieChart.paymentsList[i]
-                    });
-                }
-                // 调用排序方式进行排序,根据value属性排序
-                seriesData.sort(compare('value'));
-
-                // 排序后重新遍历,给饼状图属性赋值
-                for (var i = 0; i < seriesData.length; i++) {
-                    legendData.push(seriesData[i].name);
-                    selected[seriesData[i].name] = i < 6;
-                }
-                return {
-                    legendData: legendData,
-                    seriesData: seriesData,
-                    selected: selected
-                };
+        }
+        function genData() {
+            var seriesData = [];
+            for (var i = 0; i < $scope.pieChart.length; i++) {
+                seriesData.push({
+                    name: $scope.pieChart[i].name,
+                    value: $scope.pieChart[i].value
+                });
             }
+            return seriesData;
         }
         pieChart.setOption(pieOption);
     });

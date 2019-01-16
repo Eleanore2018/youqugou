@@ -5,9 +5,8 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="first_char" property="firstChar" jdbcType="VARCHAR" />
+    <result column="sellerName" property="sellername" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
-    <result column="sellerName" property="sellerName" jdbcType="VARCHAR" />
-
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -67,16 +66,14 @@
       </foreach>
     </where>
   </sql>
-    <!--贾运通加字段-->
   <sql id="Base_Column_List" >
     <if test="fields == null" >
-      id, name, first_char, status,sellerName
+      id, name, first_char, sellerName, status
     </if>
     <if test="fields != null" >
       ${fields}
     </if>
   </sql>
-
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.itcast.core.pojo.good.BrandQuery" >
     select
     <if test="distinct" >
@@ -91,18 +88,9 @@
       order by ${orderByClause}
     </if>
   </select>
-<!--贾运通-->
-  <select id="selectBrandStatus" resultMap="BaseResultMap" >
-     SELECT
-    id,NAME,first_char,STATUS,sellerName
-    FROM tb_brand
-    ORDER BY status
---      #{status,jdbcType=VARCHAR}
-  </select>
-
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
-    id,name,first_char,status,sellerName
+    id,name,first_char,sellerName,status
     from tb_brand
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -121,8 +109,9 @@
   </delete>
   <insert id="insert" parameterType="cn.itcast.core.pojo.good.Brand" >
     insert into tb_brand (id, name, first_char, 
-      status,sellerName)
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{firstChar,jdbcType=VARCHAR}),#{status,jdbcType=VARCHAR},#{sellerName,jdbcType=VARCHAR}
+      sellerName, status)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{firstChar,jdbcType=VARCHAR},
+      #{sellername,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.itcast.core.pojo.good.Brand" >
     insert into tb_brand
@@ -136,11 +125,11 @@
       <if test="firstChar != null" >
         first_char,
       </if>
+      <if test="sellername != null" >
+        sellerName,
+      </if>
       <if test="status != null" >
         status,
-      </if>
-      <if test="sellerName != null" >
-        sellerName,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -153,11 +142,11 @@
       <if test="firstChar != null" >
         #{firstChar,jdbcType=VARCHAR},
       </if>
+      <if test="sellername != null" >
+        #{sellername,jdbcType=VARCHAR},
+      </if>
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
-      </if>
-      <if test="sellerName != null" >
-        #{sellerName,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -167,7 +156,6 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <!--贾运通-->
   <update id="updateByExampleSelective" parameterType="map" >
     update tb_brand
     <set >
@@ -180,14 +168,13 @@
       <if test="record.firstChar != null" >
         first_char = #{record.firstChar,jdbcType=VARCHAR},
       </if>
+      <if test="record.sellername != null" >
+        sellerName = #{record.sellername,jdbcType=VARCHAR},
+      </if>
       <if test="record.status != null" >
         status = #{record.status,jdbcType=VARCHAR},
       </if>
-      <if test="record.seller_name != null" >
-        seller_name = #{record.seller_name,jdbcType=VARCHAR},
-      </if>
     </set>
-
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -196,9 +183,9 @@
     update tb_brand
     set id = #{record.id,jdbcType=BIGINT},
       name = #{record.name,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=VARCHAR},
-      sellerName = #{record.sellerName,jdbcType=VARCHAR},
-      first_char = #{record.firstChar,jdbcType=VARCHAR}
+      first_char = #{record.firstChar,jdbcType=VARCHAR},
+      sellerName = #{record.sellername,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -212,11 +199,11 @@
       <if test="firstChar != null" >
         first_char = #{firstChar,jdbcType=VARCHAR},
       </if>
+      <if test="sellername != null" >
+        sellerName = #{sellername,jdbcType=VARCHAR},
+      </if>
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
-      </if>
-      <if test="sellerName != null" >
-        sellerName = #{sellerName,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -225,8 +212,8 @@
     update tb_brand
     set name = #{name,jdbcType=VARCHAR},
       first_char = #{firstChar,jdbcType=VARCHAR},
+      sellerName = #{sellername,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR}
-      seller_name = #{seller_name,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

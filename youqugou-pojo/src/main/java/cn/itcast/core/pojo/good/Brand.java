@@ -16,24 +16,9 @@ public class Brand implements Serializable {
      */
     private String firstChar;
 
+    private String sellername;
+
     private String status;
-    private String sellerName;
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getSellerName() {
-        return sellerName;
-    }
-
-    public void setSellerName(String sellerName) {
-        this.sellerName = sellerName;
-    }
 
     private static final long serialVersionUID = 1L;
 
@@ -61,9 +46,22 @@ public class Brand implements Serializable {
         this.firstChar = firstChar == null ? null : firstChar.trim();
     }
 
+    public String getSellername() {
+        return sellername;
+    }
 
+    public void setSellername(String sellername) {
+        this.sellername = sellername == null ? null : sellername.trim();
+    }
 
-    /*添加两个字段2018/12/30--贾*/
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -73,8 +71,8 @@ public class Brand implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", name=").append(name);
         sb.append(", firstChar=").append(firstChar);
+        sb.append(", sellername=").append(sellername);
         sb.append(", status=").append(status);
-        sb.append(", sellerName=").append(sellerName);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
@@ -95,8 +93,8 @@ public class Brand implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
             && (this.getFirstChar() == null ? other.getFirstChar() == null : this.getFirstChar().equals(other.getFirstChar()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-            && (this.getSellerName() == null ? other.getSellerName() == null : this.getSellerName().equals(other.getSellerName()));
+            && (this.getSellername() == null ? other.getSellername() == null : this.getSellername().equals(other.getSellername()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
     }
 
     @Override
@@ -106,8 +104,8 @@ public class Brand implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
         result = prime * result + ((getFirstChar() == null) ? 0 : getFirstChar().hashCode());
+        result = prime * result + ((getSellername() == null) ? 0 : getSellername().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
-        result = prime * result + ((getSellerName() == null) ? 0 : getSellerName().hashCode());
         return result;
     }
 }

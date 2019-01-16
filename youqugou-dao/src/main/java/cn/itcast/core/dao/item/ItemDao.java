@@ -5,7 +5,6 @@ import cn.itcast.core.pojo.item.ItemQuery;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 public interface ItemDao {
     int countByExample(ItemQuery example);
@@ -29,8 +28,4 @@ public interface ItemDao {
     int updateByPrimaryKeySelective(Item record);
 
     int updateByPrimaryKey(Item record);
-
-
-    //张静  2019-01-02
-    List<Map> findItemMapByGoodsId(Long id);
 }

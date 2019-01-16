@@ -33,6 +33,9 @@ public class SeckillAuditServiceImpl implements SeckillAuditService {
         criteria.andStatusEqualTo("0");//只查询未审核的
 
         if (null != seckillGoods.getTitle() && !"".equals(seckillGoods.getTitle())){
+            if (seckillGoods.getTitle().contains(" ")){
+                seckillGoods.setTitle(seckillGoods.getTitle().replace(" ",""));
+            }
             criteria.andTitleLike("%" + seckillGoods.getTitle().trim() + "%");
         }
         if (null != seckillGoods.getSellerId() && !"".equals(seckillGoods.getSellerId())){

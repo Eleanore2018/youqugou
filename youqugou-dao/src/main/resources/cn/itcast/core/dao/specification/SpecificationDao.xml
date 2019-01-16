@@ -4,6 +4,8 @@
   <resultMap id="BaseResultMap" type="cn.itcast.core.pojo.specification.Specification" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="spec_name" property="specName" jdbcType="VARCHAR" />
+
+    <!--添加status字段-贾运通-2018/12/31-->
     <result column="status" property="status" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -64,6 +66,7 @@
       </foreach>
     </where>
   </sql>
+  <!--添加status字段-->
   <sql id="Base_Column_List" >
     <if test="fields == null" >
       id, spec_name, status
@@ -86,7 +89,7 @@
       order by ${orderByClause}
     </if>
   </select>
-  <!--贾运通-->
+  <!--添加status字段-贾运通2018/12/31-->
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     id,spec_name,status
@@ -108,8 +111,8 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.itcast.core.pojo.specification.Specification" >
-    insert into tb_specification (id, spec_name)
-    values (#{id,jdbcType=BIGINT}, #{specName,jdbcType=VARCHAR})
+    insert into tb_specification (id, spec_name,status)
+    values (#{id,jdbcType=BIGINT}, #{specName,jdbcType=VARCHAR},#{sattus,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.itcast.core.pojo.specification.Specification" useGeneratedKeys="true" keyProperty="id">
     insert into tb_specification
@@ -168,6 +171,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
+  <!--添加status字段-->
   <update id="updateByPrimaryKeySelective" parameterType="cn.itcast.core.pojo.specification.Specification" >
     update tb_specification
     <set >

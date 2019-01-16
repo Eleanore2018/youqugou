@@ -21,7 +21,10 @@
     <script type="text/javascript" src="../plugins/angularjs/pagination.js"></script>
     <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 90db5397e06d16bb68eb789b0b63f899c4109509
     <script type="text/javascript" src="../js/base_pagination.js"></script>
     <script type="text/javascript" src="../js/controller/baseController.js"></script>
     <script type="text/javascript" src="../js/controller/goodsController.js"></script>
@@ -102,6 +105,7 @@
                 <th class="sorting">三级分类</th>
                 <th class="sorting">状态</th>
                 <th class="text-center">操作</th>
+                <th class="text-center">秒kill</th>
             </tr>
             </thead>
             <tbody>
@@ -121,6 +125,19 @@
                 <td class="text-center">
                     <a class="btn bg-olive btn-xs" href="goods_edit.html#?id={{entity.id}}">修改</a>
                 </td>
+                <td class="text-center">
+
+                </td>
+                <!---->
+                <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div id="ycbc" style="display:none">隐藏的内容</div>
+                        </div>
+                    </div>
+                </div>
+                <!---->
+
             </tr>
             </tbody>
         </table>

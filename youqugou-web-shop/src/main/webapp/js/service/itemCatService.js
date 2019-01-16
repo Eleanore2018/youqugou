@@ -33,6 +33,4 @@ app.service('itemCatService',function($http){
     this.selectItemCatsByParentId = function(parentId){
         return $http.get("../itemCat/selectItemCatsByParentId.do?parentId="+parentId);
     }
-
-
 });

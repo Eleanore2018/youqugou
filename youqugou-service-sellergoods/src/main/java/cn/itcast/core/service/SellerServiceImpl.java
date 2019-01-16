@@ -4,8 +4,6 @@ import cn.itcast.core.dao.seller.SellerDao;
 import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.pojo.seller.Seller;
 import cn.itcast.core.pojo.seller.SellerQuery;
-import cn.itcast.core.pojo.user.User;
-import cn.itcast.core.pojo.user.UserQuery;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;

@@ -497,10 +497,4 @@
       seller = #{seller,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-
-  <select id="findItemMapByGoodsId" parameterType="java.lang.Long" resultType="java.util.Map">
-    select id,title as text from tb_item
-  </select>
-
-
 </mapper>

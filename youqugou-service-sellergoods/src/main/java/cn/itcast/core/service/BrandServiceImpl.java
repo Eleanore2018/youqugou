@@ -60,7 +60,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public PageResult searchBrand(Integer pageNum, Integer pageSize, Brand brand) {
+    public PageResult searchBrand(Integer pageNum, Integer pageSize, Brand brand,String name) {
         PageHelper.startPage(pageNum, pageSize);
 
         BrandQuery brandQuery = new BrandQuery();
@@ -73,9 +73,12 @@ public class BrandServiceImpl implements BrandService {
             criteria.andFirstCharEqualTo(brand.getFirstChar());
         }
 
+        criteria.andSellernameEqualTo(name);
+
         Page<Brand> page = (Page<Brand>) brandDao.selectByExample(brandQuery);
         return new PageResult(page.getTotal(), page.getResult());
     }
+
 
 
 

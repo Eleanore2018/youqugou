@@ -32,5 +32,4 @@ public interface ItemCatDao {
     int updateByPrimaryKey(ItemCat record);
 
     List<Map> selectItemCatsMapByParentId(Long parentId);
-
 }

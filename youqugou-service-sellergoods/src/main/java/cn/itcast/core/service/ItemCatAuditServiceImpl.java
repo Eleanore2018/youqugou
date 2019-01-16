@@ -42,6 +42,9 @@ public class ItemCatAuditServiceImpl implements ItemCatAuditService {
         ItemCatQuery.Criteria criteria = itemCatQuery.createCriteria();
         criteria.andStatusEqualTo("0");//只查询未审核的
         if (null != itemcat.getName() && !"".equals(itemcat.getName().trim())) {
+            if (itemcat.getName().contains(" ")){
+                itemcat.setName(itemcat.getName().replace(" ",""));
+            }
             criteria.andNameLike(itemcat.getName().trim());
         }
         if (null != itemcat.getTypeId()) {

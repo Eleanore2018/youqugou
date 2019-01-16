@@ -9,9 +9,8 @@
 	<http pattern="/js/**" security="none"></http>
 	<http pattern="/plugins/**" security="none"></http>
 	
-	<http pattern="/seckill-index.html" security="none"></http>
-    <http pattern="/seckillGoods/findSeckillList.do" security="none"></http>
-    <http pattern="/seckillGoods/findOne.do" security="none"></http>
+	<http pattern="/seckill-*.html" security="none"></http>
+    <http pattern="/seckillGoods/*.do" security="none"></http>	
 	<!--   entry-point-ref  入口点引用 -->
 	<http use-expressions="false" entry-point-ref="casProcessingFilterEntryPoint"> 
 		<!-- 匿名角色 IS_AUTHENTICATED_ANONYMOUSLY -->
@@ -27,12 +26,12 @@
   	<!-- CAS入口点 开始 -->
     <beans:bean id="casProcessingFilterEntryPoint" class="org.springframework.security.cas.web.CasAuthenticationEntryPoint">  
         <!-- 单点登录服务器登录URL -->  
-        <beans:property name="loginUrl" value="http://192.168.200.128:9100/cas/login"/>
+        <beans:property name="loginUrl" value="http://192.168.200.128:9100/cas/login"/>  
         <beans:property name="serviceProperties" ref="serviceProperties"/>  
     </beans:bean>      
     <beans:bean id="serviceProperties" class="org.springframework.security.cas.ServiceProperties">  
         <!--service 配置自身工程的根地址+/login/cas   -->  
-        <beans:property name="service" value="http://localhost:9105/login/cas"/>
+        <beans:property name="service" value="http://localhost:8084/login/cas"/>
     </beans:bean>  
     <!-- CAS入口点 结束 -->
 

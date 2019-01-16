@@ -252,7 +252,8 @@ $(function(){
 										<td width="5%" class="center">{{orderItem.num}}</td>
 										<td width="8%" class="center">
 											<ul class="unstyled">
-
+												<li>{{status[orderItem.status]}}</li>
+												<li><a>退货/退款</a></li>
 											</ul>
 										</td>
 										<td ng-if="$index==0" width="10%" class="center" rowspan="{{order.orderItemList.length}}">

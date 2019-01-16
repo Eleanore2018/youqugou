@@ -31,9 +31,15 @@ public class BrandAuditServiceImpl implements BrandAuditService{
         criteria.andStatusEqualTo("0");//只查询未审核的
 
         if (null != brand.getName() && !"".equals(brand.getName().trim())){
+            if (brand.getName().contains(" ")){
+                brand.setName(brand.getName().replace(" ",""));
+            }
             criteria.andNameLike("%" + brand.getName() + "%");
         }
         if (null != brand.getFirstChar() && !"".equals(brand.getFirstChar().trim())) {
+            if (brand.getFirstChar().contains(" ")){
+                brand.setFirstChar(brand.getFirstChar().replace(" ",""));
+            }
             criteria.andFirstCharEqualTo(brand.getFirstChar());
         }
 
