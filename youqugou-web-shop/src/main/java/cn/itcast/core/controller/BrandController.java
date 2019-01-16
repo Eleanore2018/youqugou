@@ -103,7 +103,7 @@ public class BrandController {
     }
 
     /**
-     * 王浩宇修改此处于2018/12/30,品牌搜索需要根据当前登陆上家搜索
+     * 王浩宇修改此处于2018/12/30,品牌搜索需要根据当前登陆商家搜索
      */
     @RequestMapping("/searchBrand")
     public PageResult searchBrand(Integer pageNum, Integer pageSize, @RequestBody Brand brand) {
