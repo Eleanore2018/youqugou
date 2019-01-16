@@ -1,21 +1,14 @@
 /**
  * Author: Mr Liu
- * Date: 2019/1/2 00:24
+ * Date: 2019/01/08 21:05
  */
 app.controller('orderStatsController', function ($scope, orderStatsService, homeService) {
     orderStatsService.download().success(function (response) {
 
     });
 
-    // 定义一个存储商家注册的时间
-    $scope.entity = [];
-    $scope.searchTime = function () {
-
-        homeService.searchTime().success(function (response) {
-            $scope.entity = response;
-        })
-
-    };
+    // 定义一个存储优趣购上线的时间
+    $scope.entity = [2016, 9, 30];
     $scope.$watch("entity", function (newValue, oldValue) {
         if (newValue !== false) {
             var oldYear = $scope.entity[0]; // 优趣购上线的年份
@@ -78,7 +71,7 @@ app.controller('orderStatsController', function ($scope, orderStatsService, home
         // 销量折线图
         $scope.pieChart = [];
         if (JSON.stringify(newValue) !== '{}' && newValue != null) {
-            orderStatsService.getSalesByCategory($scope.year, $scope.month, $scope.timeBucket).success(function (response) {
+            orderStatsService.getSalesByCategory2Operator($scope.year, $scope.month, $scope.timeBucket).success(function (response) {
                 $scope.pieChart = response;
             })
         }
@@ -89,81 +82,68 @@ app.controller('orderStatsController', function ($scope, orderStatsService, home
         if (newValue !== false) {
             var data = genData();
             var pieOption = {
-                backgroundColor: '#2c343c',
-
                 title: {
                     text: '商品销售额饼状图',
                     left: 'center',
                     top: 20,
                     textStyle: {
-                        color: '#ccc'
+                        color: '#000'
                     }
                 },
-
-                tooltip : {
+                tooltip: {
                     trigger: 'item',
-                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    formatter: "{a} <br/>{b}: {c} ({d}%)"
                 },
-
-                visualMap: {
-                    show: false,
-                    min: 80,
-                    max: 600,
-                    inRange: {
-                        colorLightness: [0, 1]
-                    }
+                legend: {
+                    orient: 'vertical',
+                    x: 'left',
+                    data:data.legendData
                 },
-                series : [
+                series: [
                     {
                         name:'商品销售额',
                         type:'pie',
-                        radius : '55%',
-                        center: ['50%', '50%'],
-                        data:data.sort(function (a, b) { return a.value - b.value; }),
-                        roseType: 'radius',
+                        radius: ['50%', '70%'],
+                        avoidLabelOverlap: false,
                         label: {
                             normal: {
+                                show: false,
+                                position: 'center'
+                            },
+                            emphasis: {
+                                show: true,
                                 textStyle: {
-                                    color: 'rgba(255, 255, 255, 0.3)'
+                                    fontSize: '30',
+                                    fontWeight: 'bold'
                                 }
                             }
                         },
                         labelLine: {
                             normal: {
-                                lineStyle: {
-                                    color: 'rgba(255, 255, 255, 0.3)'
-                                },
-                                smooth: 0.2,
-                                length: 10,
-                                length2: 20
+                                show: false
                             }
                         },
-                        itemStyle: {
-                            normal: {
-                                color: '#c23531',
-                                shadowBlur: 200,
-                                shadowColor: 'rgba(0, 0, 0, 0.5)'
-                            }
-                        },
-
-                        animationType: 'scale',
-                        animationEasing: 'elasticOut',
-                        animationDelay: function (idx) {
-                            return Math.random() * 200;
-                        }
+                        data:data.seriesData
                     }
                 ]
             };
         }
         function genData() {
             var seriesData = [];
+            var legendData = [];
             for (var i = 0; i < $scope.pieChart.length; i++) {
                 seriesData.push({
                     name: $scope.pieChart[i].name,
                     value: $scope.pieChart[i].value
                 });
+                legendData.push({
+                    name : $scope.pieChart[i].name
+                })
             }
-            return seriesData;
+            return {
+                seriesData : seriesData,
+                legendData : legendData
+            };
         }
         pieChart.setOption(pieOption);
     });

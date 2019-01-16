@@ -101,7 +101,7 @@
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAllTypeTemplatesMap" resultType="map">
-    select id,name,status text from tb_type_template
+    select id,name text from tb_type_template
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from tb_type_template
@@ -116,7 +116,7 @@
   <insert id="insert" parameterType="cn.itcast.core.pojo.template.TypeTemplate" >
     insert into tb_type_template (id, name, spec_ids, 
       brand_ids, custom_attribute_items,status)
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{specIds,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{specIds,jdbcType=VARCHAR},
       #{brandIds,jdbcType=VARCHAR}, #{customAttributeItems,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.itcast.core.pojo.template.TypeTemplate" >

@@ -68,7 +68,7 @@ public class OrderController {
      * use to get category and sales by sellerId
      */
     @RequestMapping("/getSalesByCategory")
-    public Map<String, List> getSalesByCategory(Integer year, Integer month, String timeBucket) throws ParseException {
+    public List<Map<String, Object>> getSalesByCategory(Integer year, Integer month, String timeBucket) throws ParseException {
         // 获取当前登录商家
         String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
 

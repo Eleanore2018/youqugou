@@ -97,7 +97,7 @@
     where id = #{id,jdbcType=BIGINT}
   </select>
   <select id="selectAllSpecificationMap" resultType="java.util.Map">
-    select id,spec_name,status as text from tb_specification
+    select id,spec_name as text from tb_specification
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >

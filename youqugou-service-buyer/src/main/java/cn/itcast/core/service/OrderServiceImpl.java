@@ -25,6 +25,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -275,51 +276,80 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
+     * 查询商家订单统计
      * Author: Mr Liu
      * Date: 2019/1/2 08:25
-     *
-     * @param sellerId
-     * @param startDate
-     * @param endDate
-     * @return
      */
     @Override
-    public Map<String, List> getSalesByCategory(String sellerId, Date startDate, Date endDate) {
+    public List<Map<String, Object>> getSalesByCategory(String sellerId, Date startDate, Date endDate) {
         SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Map<String, List> pieCharts = new HashMap<>();
-            long nowTime = format1.parse(format1.format(new Date())).getTime();
-            if (endDate.getTime() < nowTime) {
-                if (redisTemplate.boundHashOps(sellerId).get("orderStats") == null) {
-                    pieCharts = getOrderStats(sellerId,startDate,endDate);
-                    redisTemplate.boundHashOps(sellerId).put("orderStats", pieCharts);
-                } else {
-                    pieCharts = (Map<String, List>) redisTemplate.boundHashOps(sellerId).get("orderStats");
-                }
-                return pieCharts;
-            } else if (endDate.getTime() >= nowTime && startDate.getTime() <= nowTime) {
-                pieCharts = getOrderStats(sellerId,startDate,endDate);
-                return pieCharts;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private Map<String, List> getOrderStats(String sellerId, Date startDate, Date endDate) {
-        Map<String, List> pieChart = new HashMap<>();
-        List paymentsList = new ArrayList();
-        List itemNameList = new ArrayList();
-        OrderStat orderStat = new OrderStat();
+        List<Map<String, Object>> pieChart = new ArrayList<>();
         OrderQuery orderQuery = new OrderQuery();
         OrderQuery.Criteria criteria = orderQuery.createCriteria();
         criteria.andSellerIdEqualTo(sellerId).andStatusEqualTo("1").andUpdateTimeBetween(startDate, endDate);
+        try {
+            long nowTime = format1.parse(format1.format(new Date())).getTime();
+            if (endDate.getTime() < nowTime) {
+                if (redisTemplate.opsForValue().get(startDate+sellerId) == null) {
+                    pieChart = getOrderStats(orderQuery, startDate, endDate);
+                    // 如果是已过去的时间,将其查询出来并存至缓存库中
+                    redisTemplate.opsForValue().set(startDate+sellerId, pieChart);
+                } else {
+                    pieChart = (List<Map<String, Object>>) redisTemplate.opsForValue().get(startDate+sellerId);
+                }
+            } else if (endDate.getTime() >= nowTime && startDate.getTime() <= nowTime) {
+                pieChart = getOrderStats(orderQuery, startDate, endDate);
+            } else {
+                pieChart = null;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return pieChart;
+    }
+
+    @Override
+    public List<Map<String, Object>> getSalesByCategory2Operator(Date startDate, Date endDate) {
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        List<Map<String, Object>> pieChart = new ArrayList<>();
+        OrderQuery orderQuery = new OrderQuery();
+        OrderQuery.Criteria criteria = orderQuery.createCriteria();
+        criteria.andStatusEqualTo("1").andUpdateTimeBetween(startDate, endDate);
+        try {
+            long nowTime = format1.parse(format1.format(new Date())).getTime();
+            if (endDate.getTime() < nowTime) {
+                if (redisTemplate.opsForValue().get(startDate) == null) {
+                    pieChart = getOrderStats(orderQuery, startDate, endDate);
+                    // 如果是已过去的时间,将其查询出来并存至缓存库中
+                    redisTemplate.opsForValue().set(startDate, pieChart);
+                } else {
+                    pieChart = (List<Map<String, Object>>) redisTemplate.opsForValue().get(startDate);
+                }
+            } else if (endDate.getTime() >= nowTime && startDate.getTime() <= nowTime) {
+                pieChart = getOrderStats(orderQuery, startDate, endDate);
+            } else {
+                pieChart = null;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return pieChart;
+    }
+
+    /**
+     * 商家订单统计抽取出来的类
+     * Author : Mr Liu
+     * Date : 2019-01-08 20:12
+     */
+    private List<Map<String, Object>> getOrderStats(OrderQuery orderQuery, Date startDate, Date endDate) throws ParseException {
+        List<Map<String, Object>> pieChart = new ArrayList<>();
+        OrderStat orderStat = new OrderStat();
         List<Order> orders = orderDao.selectByExample(orderQuery);
         List<OrderStat> orderStats = new ArrayList<>();
+        // 遍历订单项,取出payment和goodsId存至orderStats中
         for (Order order : orders) {
             OrderItemQuery orderItemQuery = new OrderItemQuery();
-            orderItemQuery.createCriteria().andOrderIdEqualTo(order.getOrderId()).andSellerIdEqualTo(sellerId);
+            orderItemQuery.createCriteria().andOrderIdEqualTo(order.getOrderId());
             List<OrderItem> orderItems = orderItemDao.selectByExample(orderItemQuery);
             for (OrderItem orderItem : orderItems) {
                 orderStat.setPayment(orderItem.getTotalFee().doubleValue());
@@ -328,12 +358,15 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         Set<Long> category1Ids = new HashSet<>();
+        // 遍历orderStats,通过goodsId查询出商品所属的一级分类
         for (OrderStat stat : orderStats) {
             Long category1Id = goodsDao.selectcategory1IdByPrimaryKey(stat.getGoodsId());
             stat.setCategory1Id(category1Id);
             category1Ids.add(category1Id);
         }
+        // 遍历一级分类
         for (Long category1Id : category1Ids) {
+            Map<String, Object> map = new HashMap<>();
             ItemCat itemCat = itemCatDao.selectByPrimaryKey(category1Id);
             Double payments = 0.0;
             for (OrderStat stat : orderStats) {
@@ -341,11 +374,11 @@ public class OrderServiceImpl implements OrderService {
                     payments += stat.getPayment();
                 }
             }
-            paymentsList.add(payments);
-            itemNameList.add(itemCat.getName());
+            // 将一级分类的名字作为name,一级分类这段时间的订单总金额作为value存入map中
+            map.put("value", payments);
+            map.put("name", itemCat.getName());
+            pieChart.add(map);
         }
-        pieChart.put("itemNameList", itemNameList);
-        pieChart.put("paymentsList", paymentsList);
         return pieChart;
     }
 }
