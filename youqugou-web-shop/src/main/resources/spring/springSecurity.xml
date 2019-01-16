@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd
+       http://code.alibabatech.com/schema/dubbo
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+">
+    <security:http pattern="/shoplogin.html" security="none"/>
+    <security:http pattern="/css/**" security="none"/>
+    <security:http pattern="/img/**" security="none"/>
+    <security:http pattern="/js/**" security="none"/>
+    <security:http pattern="/plugins/**" security="none"/>
+    <security:http pattern="/seller/insertSeller.do" security="none"/>
+    <security:http pattern="/register.html" security="none"/>
+
+    <security:http use-expressions="false">
+        <security:intercept-url pattern="/**" access="ROLE_SELLER"/>
+        <security:form-login login-page="/shoplogin.html"
+                             default-target-url="/admin/index.html"
+                             authentication-failure-url="/shoplogin.html"
+                             always-use-default-target="true"/>
+        <security:csrf disabled="true"/>
+
+        <!-- 配置框架页面不拦截 -->
+        <security:headers>
+            <security:frame-options policy="SAMEORIGIN"/>
+        </security:headers>
+
+        <security:logout logout-success-url="/shoplogin.html"/>
+    </security:http>
+
+    <!-- 引用dubbo 服务 -->
+    <dubbo:application name="youqugou-web-shop"/>
+    <dubbo:registry address="zookeeper://192.168.200.128:2181"/>
+    <!--引用dubbo中的sellerService对象-->
+    <dubbo:reference id="sellerService" interface="cn.itcast.core.service.SellerService"/>
+
+    <bean id="userService" class="cn.itcast.core.service.UserServiceImpl">
+        <!--注入dubbo中的sellerService对象-->
+        <property name="sellerService" ref="sellerService"></property>
+    </bean>
+
+
+    <security:authentication-manager>
+        <security:authentication-provider user-service-ref="userService">
+            <security:password-encoder ref="bCryptPasswordEncoder"/>
+        </security:authentication-provider>
+       <!-- <security:authentication-provider>
+            <security:user-service>
+                <security:user name="qiandu" password="123456" authorities="ROLE_SELLER"/>
+            </security:user-service>
+        </security:authentication-provider>-->
+    </security:authentication-manager>
+
+    <bean id="bCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+</beans>
