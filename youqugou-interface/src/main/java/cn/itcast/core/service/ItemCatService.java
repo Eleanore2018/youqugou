@@ -21,4 +21,6 @@ public interface ItemCatService {
     List<ItemCat> selectAllItemCats();
 
     List<Map> selectItemCatsMapByParentId(Long parentId);
+
+    List<ItemCat> findAllItemCat(Long parentId);
 }

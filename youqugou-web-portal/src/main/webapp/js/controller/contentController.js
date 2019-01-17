@@ -6,6 +6,24 @@ app.controller("contentController",function($scope,contentService){
 			$scope.contentList[categoryId] = response;
 		});
 	}
+
+	//查询楼层广告
+	$scope.contentCategory = [7,8,12];
+	$scope.contentFloor = [];
+	$scope.findFloorContent = function () {
+        console.log($scope.contentCategory);
+        contentService.findFloorContent($scope.contentCategory).success(function(response){
+        	$scope.contentFloor = response;
+		});
+    }
+
+
+    //根据父Id'0'查询出所有的分类
+    $scope.findAllItemCat = function (parentId) {
+        contentService.findAllItemCat(parentId).success(function(response){
+            $scope.itemCatList = response;
+        });
+    }
 	
 	// 搜索（传递参数）
 	$scope.search=function(){

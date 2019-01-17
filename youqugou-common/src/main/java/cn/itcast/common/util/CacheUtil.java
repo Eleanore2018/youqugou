@@ -1,9 +1,9 @@
 package cn.itcast.common.util;
 
-import org.springframework.data.redis.core.RedisTemplate;
-
 import java.util.List;
 import java.util.Set;
+
+import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * 缓存工具类

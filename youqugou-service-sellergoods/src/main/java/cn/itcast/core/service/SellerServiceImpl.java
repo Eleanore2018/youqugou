@@ -4,8 +4,6 @@ import cn.itcast.core.dao.seller.SellerDao;
 import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.pojo.seller.Seller;
 import cn.itcast.core.pojo.seller.SellerQuery;
-import cn.itcast.core.pojo.user.User;
-import cn.itcast.core.pojo.user.UserQuery;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -14,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional
@@ -57,5 +56,10 @@ public class SellerServiceImpl implements SellerService {
     @Override
     public Seller selectSellerById(String sellerId) {
         return sellerDao.selectByPrimaryKey(sellerId);
+    }
+
+    @Override
+    public List<Seller> selectAllSellers() {
+        return sellerDao.selectByExample(null);
     }
 }

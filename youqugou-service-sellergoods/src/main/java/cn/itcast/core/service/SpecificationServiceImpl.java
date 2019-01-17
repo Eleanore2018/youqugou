@@ -104,8 +104,15 @@ public class SpecificationServiceImpl implements SpecificationService {
         return row;
     }
 
+    /**
+     * 王浩宇修改2018/12/29
+     * @return
+     */
+    //-------------------------------
     @Override
     public List<Map> selectAllSpecificationMap() {
+
         return specificationDao.selectAllSpecificationMap();
     }
+    //------------------------------
 }

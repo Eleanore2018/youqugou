@@ -5,27 +5,22 @@ import cn.itcast.core.dao.good.GoodsDao;
 import cn.itcast.core.dao.good.GoodsDescDao;
 import cn.itcast.core.dao.item.ItemCatDao;
 import cn.itcast.core.dao.item.ItemDao;
+import cn.itcast.core.dao.seckill.SeckillGoodsDao;
 import cn.itcast.core.dao.seller.SellerDao;
 import cn.itcast.core.entity.PageResult;
-import cn.itcast.core.entity.Result;
 import cn.itcast.core.pojo.good.Goods;
 import cn.itcast.core.pojo.good.GoodsDesc;
 import cn.itcast.core.pojo.good.GoodsQuery;
 import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.item.ItemCat;
-import cn.itcast.core.pojo.item.ItemCatQuery;
 import cn.itcast.core.pojo.item.ItemQuery;
+import cn.itcast.core.pojo.seckill.SeckillGoods;
 import cn.itcast.core.pojogroup.GoodsVo;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import net.sf.jsqlparser.statement.select.Distinct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.solr.core.SolrTemplate;
-import org.springframework.data.solr.core.query.Criteria;
-import org.springframework.data.solr.core.query.SimpleQuery;
-import org.springframework.data.solr.core.query.SolrDataQuery;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,6 +51,9 @@ public class GoodsServiceImpl implements GoodsService {
     private Destination topicPageAndSolrDestination;
     @Autowired
     private Destination queueSolrDeleteDestination;
+
+    @Autowired
+    private SeckillGoodsDao seckillGoodsDao;
 
     @Override
     public void insertGoodsVo(GoodsVo goodsVo) {
@@ -123,6 +121,10 @@ public class GoodsServiceImpl implements GoodsService {
             criteria.andAuditStatusEqualTo(goods.getAuditStatus());
         }
         criteria.andIsDeleteIsNull();
+        //如果sellerid不为空,表示查询商户自己的数据,否则是运营商查询,查询所有商品数据  张静 2018-12-30
+        if (goods.getSellerId() != null) {
+            criteria.andSellerIdEqualTo(goods.getSellerId());
+        }
         Page<Goods> page = (Page<Goods>) goodsDao.selectByExample(goodsQuery);
         return new PageResult(page.getTotal(), page.getResult());
     }
@@ -234,4 +236,31 @@ public class GoodsServiceImpl implements GoodsService {
             });
         }
     }
+
+    //根据品牌查询商品
+    @Override
+    public List<Goods> findGoodsListByBrand(String name, Long id) {
+        GoodsQuery query=new GoodsQuery();
+        query.createCriteria().andSellerIdEqualTo(name).
+                andAuditStatusEqualTo("1").andBrandIdEqualTo(id).
+                andIsDeleteIsNull();
+         return goodsDao.selectByExample(query);
+    }
+
+
+    //添加秒杀商品 张静 2019-01-01
+    @Override
+    public void saveSeckillGoods(SeckillGoods seckillGoods) {
+        seckillGoods.setStockCount(seckillGoods.getNum());
+        seckillGoods.setCreateTime(new Date());
+        seckillGoods.setStatus("0");
+        Long goodsId = seckillGoods.getGoodsId();
+        Goods goods = goodsDao.selectByPrimaryKey(goodsId);
+        seckillGoods.setSellerId(goods.getSellerId());
+        seckillGoods.setPrice(goods.getPrice());
+
+        System.out.println(seckillGoods);
+        seckillGoodsDao.insertSelective(seckillGoods);
+    }
+
 }

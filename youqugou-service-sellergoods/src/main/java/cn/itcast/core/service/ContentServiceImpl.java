@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -91,5 +92,37 @@ public class ContentServiceImpl implements ContentService {
             redisTemplate.boundHashOps("content").put(categoryId, contentList);
         }
         return contentList;
+    }
+
+    /**
+     * 查询楼层广告信息
+     * @author 陈伟鑫
+     * @Data 12.28
+     * @param contentCategory
+     * @return
+     */
+    @Override
+    public Map<String, Map> findFloorContent(Long[] contentCategory) {
+        //先从缓存中查询楼层广告信息
+        Map<String,Map> map = (Map<String, Map>) redisTemplate.boundHashOps("content").get("floorContent");
+        //判断缓存中是否有数据
+        if (null == map || map.size() == 0) {
+            map = new HashMap<>();
+            //缓存中没有数据,先从数据库中查询
+            for (Long categoryId : contentCategory) {
+                ContentQuery contentQuery = new ContentQuery();
+                ContentQuery.Criteria criteria = contentQuery.createCriteria();
+                criteria.andCategoryIdEqualTo(categoryId);
+                List<Content> contents = contentDao.selectByExample(contentQuery);
+                Map<String,Object> map1 = new HashMap<>();
+                for (Content content : contents) {
+                    map1.put("content"+content.getId(),content);
+                }
+                map.put("category"+categoryId,map1);
+            }
+            redisTemplate.boundHashOps("content").put("floorContent",map);
+        }
+
+        return map;
     }
 }

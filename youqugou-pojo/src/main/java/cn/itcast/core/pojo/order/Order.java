@@ -3,12 +3,27 @@ package cn.itcast.core.pojo.order;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class Order implements Serializable {
     /**
      * 订单id
      */
     private Long orderId;
+
+
+    /*订单id字符串*/
+    //开始  张静 2018-12-28
+    private String orderIdStr;
+
+    public String getOrderIdStr() {
+        return orderIdStr;
+    }
+
+    public void setOrderIdStr(String orderIdStr) {
+        this.orderIdStr = orderIdStr;
+    }
+    //结束  张静 2018-12-28
 
     /**
      * 实付金额。精确到2位小数;单位:元。如:200.07，表示:200元7分
@@ -129,6 +144,21 @@ public class Order implements Serializable {
      * 商家ID
      */
     private String sellerId;
+
+    /*订单详情*/
+    private List<OrderItem> orderItemList;
+
+    public List<OrderItem> getOrderItemList() {
+        return orderItemList;
+    }
+
+    public void setOrderItemList(List<OrderItem> orderItemList) {
+        this.orderItemList = orderItemList;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     private static final long serialVersionUID = 1L;
 

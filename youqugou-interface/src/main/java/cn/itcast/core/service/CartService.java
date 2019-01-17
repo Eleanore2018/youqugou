@@ -12,4 +12,7 @@ public interface CartService {
     void mergeCart(List<Cart> carts, String username);
 
     List<Cart> selectCartsFromRedis(String username);
+
+
+    void addCollect(Long itemId,String userName);
 }

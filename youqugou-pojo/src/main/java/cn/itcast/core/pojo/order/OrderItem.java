@@ -7,6 +7,23 @@ import java.util.Objects;
 public class OrderItem implements Serializable {
     private Long id;
 
+
+    //张静 开始 2018-12-29
+    private String idStr;
+
+    public String getIdStr() {
+        return idStr;
+    }
+
+    public void setIdStr(String idStr) {
+        this.idStr = idStr;
+    }
+    //张静 结束 2018-12-29
+    /**
+     * 订单详情状态
+     */
+    private String status;
+
     /**
      * 商品id
      */
@@ -47,6 +64,29 @@ public class OrderItem implements Serializable {
      */
     private String picPath;
 
+
+    //商品名称
+    private String goodsName;
+
+    //规格
+    private String specStr;
+
+    public String getSpecStr() {
+        return specStr;
+    }
+
+    public void setSpecStr(String specStr) {
+        this.specStr = specStr;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
     private String sellerId;
 
     private static final long serialVersionUID = 1L;
@@ -57,6 +97,14 @@ public class OrderItem implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
     }
 
     public Long getItemId() {
@@ -138,6 +186,7 @@ public class OrderItem implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", status=").append(status);
         sb.append(", itemId=").append(itemId);
         sb.append(", goodsId=").append(goodsId);
         sb.append(", orderId=").append(orderId);

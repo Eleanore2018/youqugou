@@ -5,11 +5,34 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class SeckillOrder implements Serializable {
+
+    //秒杀商品 张静 2019-01-01
+    private SeckillGoods seckillGoods;
+
+    public SeckillGoods getSeckillGoods() {
+        return seckillGoods;
+    }
+
+    public void setSeckillGoods(SeckillGoods seckillGoods) {
+        this.seckillGoods = seckillGoods;
+    }
+
     /**
      * 主键
      */
     private Long id;
 
+    //id字符串  张静 2019-01-01
+    private String idStr;
+
+    public String getIdStr() {
+        return idStr;
+    }
+
+    public void setIdStr(String idStr) {
+        this.idStr = idStr;
+    }
+//结束  张静 2019-01-01
     /**
      * 秒杀商品ID
      */

@@ -1,5 +1,16 @@
 //购物车服务层
 app.service('cartService', function ($http) {
+
+    //添加购物车中的商品到我的收藏中
+    this.addCollect = function (itemId) {
+        return $http.get('cart/addCollect.do?itemId='+itemId);
+    }
+
+    //删除购物车中的商品
+    this.delete = function (itemId) {
+        return $http.get('cart/delete.do?itemId='+itemId);
+    }
+
     //购物车列表
     this.findCartList = function () {
         return $http.get('cart/findCartList.do');
