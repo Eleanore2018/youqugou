@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="plugins/angularjs/angular.min.js"></script>
+    <script>
+        var app = angular.module('testModule',[]);
+        app.controller('testController',function($scope,$http){
+            $scope.add = function () {
+                $scope.z =  parseInt($scope.x) + parseInt($scope.y);
+            };
+            $scope.list = [100,200,300,400];
+            $http.get("../brand/selectAllBrand.do").success(function (response) {
+                $scope.brandList = response;
+            })
+        });
+    </script>
+</head>
+<body  ng-app="testModule" ng-controller="testController" ng-init="name='王浩宇'">
+     <!--表达式-->
+    {{100 + 100}}
+
+    <!--双向绑定 ng-model可以看成是一个存放angular对象的容器,相当于$scope-->
+    姓名<input type="text" ng-model="name"> {{name}}
+
+     <hr>
+     <!--初始化 ng-init-->
+
+     <!--控制器-->
+    <!--x:<input type="text" ng-model="x"> + y: <input type="text" ng-model="y"> = {{add()}} <input type="text" ng-model="z">-->
+     <!--事件指令-->
+     x:<input type="text" ng-model="x"> + y: <input type="text" ng-model="y"> {{z}}
+     <br><button ng-click="add()">计算</button>
+
+    <!--循环数组-->
+    <table>
+        <tr ng-repeat="entity in list">
+            <td>{{entity}}</td>
+        </tr>
+    </table>
+
+    <!--内置服务-->
+     <table>
+         <tr ng-repeat="entity in brandList">
+             <td>{{entity.id}}</td>
+             <td>{{entity.name}}</td>
+             <td>{{entity.firstChar}}</td>
+         </tr>
+     </table>
+</body>
+</html>
