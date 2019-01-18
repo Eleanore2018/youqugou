@@ -46,7 +46,7 @@ public class HomeController {
      * Date:2018-12-29
      */
     @RequestMapping("/getSales")
-    public Map<String, List<Integer>> getSales (Integer year, Integer month, String timeBucket) throws ParseException {
+    public Map<String, List> getSales (Integer year, Integer month, String timeBucket) throws ParseException {
         // 按照-规则切割时间段,获取到一头一尾的数据
         String[] split = timeBucket.split("-");
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -60,8 +60,8 @@ public class HomeController {
             list.add(format.parse(year + "-" + month + "-" + i));
         }
         // 添加纵轴数据(每日销售额)
-        List<Integer> verticalAxis =  homeService.getSales(list, sellerId);
-        Map<String, List<Integer>> map = new HashMap<>();
+        List<Double> verticalAxis =  homeService.getSales(list, sellerId);
+        Map<String, List> map = new HashMap<>();
         map.put("horizontalAxis", horizontalAxis);
         map.put("verticalAxis", verticalAxis);
         return map;

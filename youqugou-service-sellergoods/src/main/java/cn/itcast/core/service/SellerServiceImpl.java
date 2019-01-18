@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @Transactional
@@ -55,5 +56,10 @@ public class SellerServiceImpl implements SellerService {
     @Override
     public Seller selectSellerById(String sellerId) {
         return sellerDao.selectByPrimaryKey(sellerId);
+    }
+
+    @Override
+    public List<Seller> selectAllSellers() {
+        return sellerDao.selectByExample(null);
     }
 }

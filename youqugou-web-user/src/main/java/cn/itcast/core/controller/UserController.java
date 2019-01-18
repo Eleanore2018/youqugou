@@ -1,8 +1,12 @@
 package cn.itcast.core.controller;
+/**
+ * 马超  2019.1.2
+ */
 
 import cn.itcast.common.util.PhoneFormatCheckUtils;
 import cn.itcast.core.entity.Result;
 import cn.itcast.core.pojo.user.User;
+import cn.itcast.core.pojo.user.UserPlus;
 import cn.itcast.core.service.UserService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +33,9 @@ public class UserController {
             return new Result(false, "失败");
         }
     }
+
+
+
 
     @RequestMapping("/add")
     public Result add(String smscode, @RequestBody User user) {

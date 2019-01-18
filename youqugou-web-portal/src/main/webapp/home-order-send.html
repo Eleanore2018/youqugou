@@ -121,7 +121,7 @@
 							<li class="f-item">闪购</li>
 							<li class="f-item">团购</li>
 							<li class="f-item">有趣</li>
-							<li class="f-item"><a href="seckill-index.html" target="_blank">秒杀</a></li>
+							<li class="f-item"><a href="http://localhost:9105/seckill-index.html" target="_blank">秒杀</a></li>
 						</ul>
 					</div>
 					<div class="yui3-u Right"></div>
@@ -171,6 +171,7 @@ $(function(){
                         <dl>
 							<dt><i>·</i> 订单中心</dt>
 							<dd ><a href="home-index.html"  >我的订单</a></dd>
+							<dd><a href="home-order-seckill.html" >秒杀订单</a></dd>
 							<dd><a href="home-order-pay.html" >待付款</a></dd>
 							<dd><a href="home-order-send.html"  class="list-active">待发货</a></dd>
 							<dd><a href="home-order-receive.html" >待收货</a></dd>
@@ -245,8 +246,8 @@ $(function(){
                                             <td width="5%" class="center">{{orderItem.num}}</td>
                                             <td width="8%" class="center">
                                                 <ul class="unstyled">
-                                                    <li>{{status[orderItem.status]}}</li>
-                                                    <li><a>退货/退款</a></li>
+                                                    <!--<li>{{status[orderItem.status]}}</li>-->
+                                                    <li><a>退款</a></li>
                                                 </ul>
                                             </td>
                                             <td ng-if="$index==0" width="10%" class="center" rowspan="{{order.orderItemList.length}}">

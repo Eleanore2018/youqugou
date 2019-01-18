@@ -10,5 +10,8 @@ import java.util.List;
 public interface HomeService {
     Date searchTime(String sellerId);
 
-    List<Integer> getSales(List<Date> list, String sellerId);
+    List<Double> getSales(List<Date> list, String sellerId);
+
+
+    List<Double> getSales(List<Date> list);
 }

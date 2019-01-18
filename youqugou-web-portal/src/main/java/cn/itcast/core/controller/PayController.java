@@ -29,11 +29,11 @@ public class PayController {
                 Map<String, String> map = payService.queryPayStatus(out_trade_no);
                 //判断交易状态
                 if ("SUCCESS".equals(map.get("trade_state"))) {
-//                SUCCESS—支付成功
+                    // SUCCESS—支付成功
                     System.out.println(map.get("trade_state"));
                     System.out.println();
                     //更行数据库 张静
-                    payService.updatePayLog(out_trade_no,map.get("transaction_id"),map.get("time_end"));
+                    payService.updatePayLog(out_trade_no, map.get("transaction_id"), map.get("time_end"));
                     return new Result(true, "支付成功");
                 }
                 Thread.sleep(3000);
@@ -42,9 +42,9 @@ public class PayController {
                     //五分钟
                     //调用微信那边关闭订单Api  张静 2018-12-30
                     Map<String, String> pay = payService.closePay(out_trade_no);
-                    if ("SUCCESS".equals(pay.get("return_code"))){
+                    if ("SUCCESS".equals(pay.get("return_code"))) {
                         payService.updateOrderStatus(out_trade_no);
-                        return new Result(false,"二维码超时");
+                        return new Result(false, "二维码超时");
                     }
                 }
             }

@@ -5,6 +5,7 @@ import cn.itcast.core.dao.good.GoodsDao;
 import cn.itcast.core.dao.good.GoodsDescDao;
 import cn.itcast.core.dao.item.ItemCatDao;
 import cn.itcast.core.dao.item.ItemDao;
+import cn.itcast.core.dao.seckill.SeckillGoodsDao;
 import cn.itcast.core.dao.seller.SellerDao;
 import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.pojo.good.Goods;
@@ -13,7 +14,7 @@ import cn.itcast.core.pojo.good.GoodsQuery;
 import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.item.ItemCat;
 import cn.itcast.core.pojo.item.ItemQuery;
-
+import cn.itcast.core.pojo.seckill.SeckillGoods;
 import cn.itcast.core.pojogroup.GoodsVo;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
@@ -29,7 +30,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("Duplicates")
 @Service
 @Transactional
 public class GoodsServiceImpl implements GoodsService {
@@ -51,6 +51,9 @@ public class GoodsServiceImpl implements GoodsService {
     private Destination topicPageAndSolrDestination;
     @Autowired
     private Destination queueSolrDeleteDestination;
+
+    @Autowired
+    private SeckillGoodsDao seckillGoodsDao;
 
     @Override
     public void insertGoodsVo(GoodsVo goodsVo) {
@@ -234,6 +237,32 @@ public class GoodsServiceImpl implements GoodsService {
                 });
             }
         }
+    }
+
+    //根据品牌查询商品
+    @Override
+    public List<Goods> findGoodsListByBrand(String name, Long id) {
+        GoodsQuery query=new GoodsQuery();
+        query.createCriteria().andSellerIdEqualTo(name).
+                andAuditStatusEqualTo("1").andBrandIdEqualTo(id).
+                andIsDeleteIsNull();
+         return goodsDao.selectByExample(query);
+    }
+
+
+    //添加秒杀商品 张静 2019-01-01
+    @Override
+    public void saveSeckillGoods(SeckillGoods seckillGoods) {
+        seckillGoods.setStockCount(seckillGoods.getNum());
+        seckillGoods.setCreateTime(new Date());
+        seckillGoods.setStatus("0");
+        Long goodsId = seckillGoods.getGoodsId();
+        Goods goods = goodsDao.selectByPrimaryKey(goodsId);
+        seckillGoods.setSellerId(goods.getSellerId());
+        seckillGoods.setPrice(goods.getPrice());
+
+        System.out.println(seckillGoods);
+        seckillGoodsDao.insertSelective(seckillGoods);
     }
 
     /**

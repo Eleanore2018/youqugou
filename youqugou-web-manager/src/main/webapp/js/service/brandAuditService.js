@@ -13,15 +13,5 @@ app.service("brandAuditService", function ($http) {
         return $http.get('../brandAudit/updateStatus.do?ids='+ids+"&status="+status);
     }
 
-    this.selectBrandById = function (id) {
-        return $http.get("../brand/selectBrandById.do?id=" + id)
-    }
 
-    this.deleteBrandByIds = function (ids) {
-        return $http.post("../brandAudit/deleteBrandByIds.do", ids)
-    }
-
-    this.selectAllBrandMap = function () {
-        return $http.get("../brand/selectAllBrandMap.do");
-    }
 });

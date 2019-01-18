@@ -1,6 +1,6 @@
 //购物车控制层
 app.controller('cartController', function ($scope, cartService) {
-    
+
     //添加购物车的商品进入到我的收藏中
     $scope.addCollect = function (itemId) {
         cartService.addCollect(itemId).success(
@@ -26,8 +26,8 @@ app.controller('cartController', function ($scope, cartService) {
     }
 
 
-    
-    
+
+
     //查询购物车列表
     $scope.findCartList = function () {
         cartService.findCartList().success(
@@ -113,8 +113,5 @@ app.controller('cartController', function ($scope, cartService) {
             }
         );
     }
-
-
-
 
 });

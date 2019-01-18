@@ -40,4 +40,14 @@ app.service('goodsService',function($http){
     this.searchGoodsPage=function(currentPage,itemsPerPage,searchEntity){
         return $http.post('../goods/searchGoodsPage.do?pageNum='+currentPage+"&pageSize="+itemsPerPage, searchEntity);
     }
+
+    //根据品牌查询商品 张静 2019-01-01
+    this.findGoodsListByBrand=function (id) {
+        return $http.get('../goods/findGoodsListByBrand.do?id='+id);
+    }
+
+    //保存秒杀商品 张静 2019-01-01
+    this.saveSeckillGoods=function (entity) {
+        return $http.post('../goods/saveSeckillGoods.do',entity);
+    }
 });

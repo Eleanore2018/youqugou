@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -90,15 +92,11 @@ public class BrandController {
     }
 
     /**
-     * 查询分页数据,带查询条件
-     * @param pageNum
-     * @param pageSize
-     * @param brand
-     * @return
+     * 王浩宇修改于2018/12/30,接口中参数添加了一个String name
      */
     @RequestMapping("/searchBrand")
-    public PageResult searchBrand(Integer pageNum, Integer pageSize, @RequestBody Brand brand) {
-        return brandService.searchBrand(pageNum, pageSize, brand);
+    public PageResult searchBrand(Integer pageNum, Integer pageSize, @RequestBody Brand brand,String name) {
+        return brandService.searchBrand(pageNum, pageSize, brand,name);
     }
 
 

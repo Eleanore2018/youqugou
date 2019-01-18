@@ -1,10 +1,8 @@
 package cn.itcast.core.service;
 
-
 import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.pojo.specification.Specification;
 import cn.itcast.core.pojogroup.SpecificationVo;
-
 
 import java.util.List;
 import java.util.Map;

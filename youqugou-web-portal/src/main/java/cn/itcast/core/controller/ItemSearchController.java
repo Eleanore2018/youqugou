@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
-/*
-* 左建洲
-* */
+
 @RestController
 @RequestMapping("/itemSearch")
 public class ItemSearchController {
@@ -18,8 +16,6 @@ public class ItemSearchController {
 
     @RequestMapping("/search")
     public Map<String, Object> search(@RequestBody Map<String, String> searchMap) {
-        Map<String, Object> map = itemSearchService.searchItem(searchMap);
-
-        return map;
+        return itemSearchService.searchItem(searchMap);
     }
 }

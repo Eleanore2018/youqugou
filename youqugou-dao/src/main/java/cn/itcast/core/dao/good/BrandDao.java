@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface BrandDao {
+
+    List<Map> selectAllBrandMap();
+
     int countByExample(BrandQuery example);
 
     int deleteByExample(BrandQuery example);
@@ -29,8 +32,4 @@ public interface BrandDao {
     int updateByPrimaryKeySelective(Brand record);
 
     int updateByPrimaryKey(Brand record);
-
-    List<Map> selectAllBrandMap();
-
-
 }

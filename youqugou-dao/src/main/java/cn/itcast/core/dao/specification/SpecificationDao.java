@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface SpecificationDao {
+
+    List<Map> selectAllSpecificationMap();
+
     int countByExample(SpecificationQuery example);
 
     int deleteByExample(SpecificationQuery example);
@@ -29,6 +32,4 @@ public interface SpecificationDao {
     int updateByPrimaryKeySelective(Specification record);
 
     int updateByPrimaryKey(Specification record);
-
-    List<Map> selectAllSpecificationMap();
 }

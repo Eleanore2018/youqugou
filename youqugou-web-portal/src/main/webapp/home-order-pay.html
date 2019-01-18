@@ -121,7 +121,7 @@
 							<li class="f-item">闪购</li>
 							<li class="f-item">团购</li>
 							<li class="f-item">有趣</li>
-							<li class="f-item"><a href="seckill-index.html" target="_blank">秒杀</a></li>
+							<li class="f-item"><a href="http://localhost:9105/seckill-index.html" target="_blank">秒杀</a></li>
 						</ul>
 					</div>
 					<div class="yui3-u Right"></div>
@@ -171,6 +171,7 @@ $(function(){
                         <dl>
 							<dt><i>·</i> 订单中心</dt>
 							<dd ><a href="home-index.html"   >我的订单</a></dd>
+							<dd><a href="home-order-seckill.html" >秒杀订单</a></dd>
 							<dd><a href="home-order-pay.html" class="list-active">待付款</a></dd>
 							<dd><a href="home-order-send.html"  >待发货</a></dd>
 							<dd><a href="home-order-receive.html" >待收货</a></dd>
@@ -237,7 +238,7 @@ $(function(){
 									<tbody>
 									<tr ng-repeat="orderItem in order.orderItemList">
 										<td width="35%">
-											<div class="typographic"><img src="{{orderItem.picPath}}" width="45px" height="45px"/>
+											<div class="typographic"><img src="{{orderItem.picPath}}" width="60px" height="45px"/>
 												<a href="#" class="block-text">{{orderItem.goodsName}}</a><br>
 												<span class="guige">规格：{{orderItem.specStr}}</span>
 											</div>
@@ -258,7 +259,7 @@ $(function(){
 										<td ng-if="$index==0" width="10%" class="center" rowspan="{{order.orderItemList.length}}">
 											<ul class="unstyled">
 												<li>¥{{order.payment}}</li>
-												<li>（含运费：￥{{order.postFee}}）</li>
+												<li>（含运费：￥{{order.postFee==null?'0.00':order.postFee}}）</li>
 											</ul>
 										</td>
 										<td width="10%" class="center" rowspan="1">

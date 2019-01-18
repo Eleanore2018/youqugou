@@ -1,7 +1,10 @@
 package cn.itcast.core.service;
-
+/**
+ * 马超  2019.1.2
+ */
 import cn.itcast.core.dao.user.UserDao;
 import cn.itcast.core.pojo.user.User;
+import cn.itcast.core.pojo.user.UserQuery;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.jms.*;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -60,4 +64,30 @@ public class UserServiceImpl implements UserService {
             }
         }
     }
+
+//    马超2018.12.30
+    @Override
+    public void addselfCenter(User user) {
+        userDao.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public User loginInfo(String username) {
+        UserQuery userQuery = new UserQuery();
+        userQuery.createCriteria().andUsernameEqualTo(username);
+        List<User> users = userDao.selectByExample(userQuery);
+        if (users!=null&&users.size()>0){
+            return users.get(0);
+        }
+        return null;
+    }
+
+
+//    @Override
+//    public User loginInfo(String username) {
+//
+//
+////        userDao.selectByExample()
+//
+//    }
 }

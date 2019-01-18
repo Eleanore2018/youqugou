@@ -28,6 +28,9 @@
     <result column="source_type" property="sourceType" jdbcType="VARCHAR" />
     <result column="seller_id" property="sellerId" jdbcType="VARCHAR" />
   </resultMap>
+  <resultMap id="PaymentResultMap" type="BigDecimal" >
+    <result column="payment" property="payment" jdbcType="DECIMAL" />
+  </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -103,6 +106,25 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
+    from tb_order
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <!--
+        Author:Mr Liu
+        Date:2019/1/1
+        use to query payment
+    -->
+  <select id="selectPaymentByExample" resultMap="PaymentResultMap" parameterType="cn.itcast.core.pojo.order.OrderQuery" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    payment
     from tb_order
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />

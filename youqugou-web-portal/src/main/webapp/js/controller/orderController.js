@@ -12,9 +12,7 @@ app.controller('orderController',function($scope,$location,orderService,loginSer
                 buildPageLabel();//构建分页栏
             }
         );
-
-
-    }
+    };
 
     //订单状态 1、未付款，2、已付款，3、未发货，4、已发货，5、交易成功，6、交易关闭,7、待评价  张静
     $scope.status = ["","未支付", "已支付", "未发货", "已发货","交易成功","交易关闭","待评价"];

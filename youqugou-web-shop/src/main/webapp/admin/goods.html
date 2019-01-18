@@ -28,11 +28,19 @@
     <script type="text/javascript" src="../js/service/itemCatService.js"></script>
     <script type="text/javascript" src="../js/service/uploadService.js"></script>
     <script type="text/javascript" src="../js/service/typeTemplateService.js"></script>
+    <script type="text/javascript" src="../js/service/itemService.js"></script>
+
+
+    <!-- 引入select2的相关的css和js -->
+    <link rel="stylesheet" href="../plugins/select2/select2.css"/>
+    <link rel="stylesheet" href="../plugins/select2/select2-bootstrap.css"/>
+    <script src="../plugins/select2/select2.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="../js/angular-select2.js"></script>
 
 </head>
 
 <body class="hold-transition skin-red sidebar-mini" ng-app="youqugou" ng-controller="goodsController"
-      ng-init="selectAllItemCats()">
+      ng-init="selectAllItemCats();selectItemCat1List()">
 <!-- .box-body -->
 
 <div class="box-header with-border">
@@ -57,6 +65,15 @@
                     <button type="button" class="btn btn-default" title="上架" ng-click="putOnSale('4')"><i class="fa fa-check"></i> 上架</button>
                     <button type="button" class="btn btn-default" title="下架" ng-click="undercarriage('5')"><i class="fa fa-ban"></i> 下架</button>
                     <!--end-->
+                    <button type="button" class="btn btn-default" title="屏蔽" onclick='confirm("你确认要屏蔽吗？")'><i
+                            class="fa fa-ban"></i> 屏蔽
+                    </button>
+                    <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
+                            class="fa fa-refresh"></i> 刷新
+                    </button>
+                    <button type="button" class="btn btn-default" title="新建秒杀" data-toggle="modal"
+                            data-target="#editModal"><i class="fa fa-file-o" ng-click="entity={}"></i> 新建秒杀
+                    </button>
                 </div>
             </div>
         </div>
@@ -70,6 +87,10 @@
                 <option value="3">关闭</option>
                 <option value="4">上架</option>
                 <option value="5">下架</option>
+                <option value="0">未申请</option>
+                <option value="1">审核通过</option>
+                <option value="2">审核未通过</option>
+                <option value="3">关闭</option>
             </select>
                 商品名称：<input type="text" ng-model="searchEntity.goodsName">
                 <button class="btn btn-default" ng-click="reloadList()">查询</button>
@@ -92,6 +113,7 @@
                 <th class="sorting">三级分类</th>
                 <th class="sorting">状态</th>
                 <th class="text-center">操作</th>
+                <th class="text-center">秒kill</th>
             </tr>
             </thead>
             <tbody>
@@ -111,6 +133,19 @@
                 <td class="text-center">
                     <a class="btn bg-olive btn-xs" href="goods_edit.html#?id={{entity.id}}">修改</a>
                 </td>
+                <td class="text-center">
+
+                </td>
+                <!---->
+                <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div id="ycbc" style="display:none">隐藏的内容</div>
+                        </div>
+                    </div>
+                </div>
+                <!---->
+
             </tr>
             </tbody>
         </table>
@@ -124,6 +159,94 @@
 
 </div>
 <!-- /.box-body -->
+
+
+
+<!-- 秒杀商品窗口 -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">新建秒杀商品</h3>
+            </div>
+            <div class="modal-body">
+
+                <table>
+                    <!--<tr>
+                        <td>
+                            一级分类:<select class="form-control"  ng-options="item.id as item.name for item in itemCat1List">
+                        </select>
+                        </td>
+                        <td>
+                            二级分类:<select class="form-control select-sm" ng-options="item.id as item.name for item in itemCat2List"></select>
+                        </td>
+                        <td>
+                            三级分类:<select class="form-control select-sm" ng-options="item.id as item.name for item in itemCat3List"></select>
+                        </td>
+                        <td>
+                            品牌:<select class="form-control" ng-model="entity.goods.brandId" ng-options="item.id as item.text for item in typeTemplate.brandIds" ></select>
+                        </td>
+                    </tr>-->
+
+                    <div class="col-md-10 data">
+                            <tr>
+                                <td>商品分类</td>
+                                <td>
+                                    <select class="form-control" ng-model="entity.goods.category1Id" ng-options="item.id as item.name for item in itemCat1List">
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-control select-sm"  ng-model="entity.goods.category2Id" ng-options="item.id as item.name for item in itemCat2List"></select>
+                                </td>
+                                <td>
+                                    <select class="form-control select-sm" ng-model="entity.goods.category3Id" ng-options="item.id as item.name for item in itemCat3List"></select>
+                                </td>
+                            </tr>
+
+                        <tr>
+                            <td>选择品牌</td>
+                            <td>
+                                <select class="form-control select-sm" ng-model="entity.goods.brandId"  ng-options="item.id as item.text for item in typeTemplate.brandIds" ></select>
+                            </td>
+                            <td>选择商品</td>
+                            <td>
+                                <select class="form-control select-sm" ng-model="entity2.goodsId"  ng-options="item.id as item.goodsName for item in goodsList" ></select>
+                            </td>
+                            <td>选择规格</td>
+                            <td>
+                                <select class="form-control select-sm" ng-model="entity2.itemId"  ng-options="item.id as item.title for item in itemList" ></select>
+                            </td>
+
+                        </tr>
+                        <tr>
+
+                        </tr>
+                    </div>
+
+                    <tr>
+                        <td>开始时间:</td>
+                        <td><input class="form-control" type="date" ng-model="entity2.startTime"></td>
+                        <td>结束时间:</td>
+                        <td><input class="form-control" type="date" ng-model="entity2.endTime"></td>
+                    </tr>
+                    <tr>
+                        <td>秒杀价格</td>
+                        <td><input class="form-control" type="text" ng-model="entity2.costPrice"></td>
+                        <td>秒杀数量</td>
+                        <td><input class="form-control" type="text" ng-model="entity2.num"></td>
+                    </tr>
+
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="saveSeckillGoods()">保存</button>
+                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 

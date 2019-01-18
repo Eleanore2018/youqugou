@@ -6,9 +6,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-/*
-* 左建洲
-* */
+
 @Service
 public class CollectServiceImpl implements CollectService {
 

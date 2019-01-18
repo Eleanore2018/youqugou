@@ -2,6 +2,7 @@ package cn.itcast.core.service;
 
 import cn.itcast.common.util.IdWorker;
 import cn.itcast.core.dao.good.GoodsDao;
+import cn.itcast.core.dao.item.ItemCatDao;
 import cn.itcast.core.dao.item.ItemDao;
 import cn.itcast.core.dao.log.PayLogDao;
 import cn.itcast.core.dao.order.OrderDao;
@@ -11,11 +12,9 @@ import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.pojo.Cart;
 import cn.itcast.core.pojo.good.Goods;
 import cn.itcast.core.pojo.item.Item;
+import cn.itcast.core.pojo.item.ItemCat;
 import cn.itcast.core.pojo.log.PayLog;
-import cn.itcast.core.pojo.order.Order;
-import cn.itcast.core.pojo.order.OrderItem;
-import cn.itcast.core.pojo.order.OrderItemQuery;
-import cn.itcast.core.pojo.order.OrderQuery;
+import cn.itcast.core.pojo.order.*;
 import cn.itcast.core.pojo.seller.Seller;
 import cn.itcast.core.pojogroup.OrderItemVo;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -26,9 +25,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @Transactional
@@ -50,6 +49,9 @@ public class OrderServiceImpl implements OrderService {
     private SellerDao sellerDao;   //张静
     @Autowired
     private GoodsDao goodsDao; //张静
+
+    @Autowired
+    private ItemCatDao itemCatDao;
 
     @Override
     public void insertOrder(Order order) {
@@ -113,7 +115,7 @@ public class OrderServiceImpl implements OrderService {
         // 支付订单生成时间
         payLog.setCreateTime(new Date());
         // 设置支付订单总金额 单位(分)
-        payLog.setTotalFee((long)(totalPrice*100));
+        payLog.setTotalFee((long) (totalPrice * 100));
         // 设置支付用户
         payLog.setUserId(order.getUserId());
         // 设置支付状态
@@ -132,31 +134,31 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public PageResult search(String status, String name, Integer pageNo, Integer pageSize) {
         //查询订单
-        OrderQuery query=new OrderQuery();
+        OrderQuery query = new OrderQuery();
         OrderQuery.Criteria criteria = query.createCriteria();
-        if (!"".equals(status)){
+        if (!"".equals(status)) {
             criteria.andStatusEqualTo(status);
         }
         criteria.andUserIdEqualTo(name);
 
-        PageHelper.startPage(pageNo,pageSize);
+        PageHelper.startPage(pageNo, pageSize);
         //查询当前用户的订单
         List<Order> orderList = orderDao.selectByExample(query);
-        if (orderList!=null&&orderList.size()>0){
+        if (orderList != null && orderList.size() > 0) {
             for (Order order : orderList) {
                 order.setOrderIdStr(String.valueOf(order.getOrderId()));
                 //查询卖家店铺
                 Seller seller = sellerDao.selectByPrimaryKey(order.getSellerId());
                 order.setBuyerNick(seller.getNickName());
                 //查询当前用户订单详情
-                OrderItemQuery itemQuery=new OrderItemQuery();
+                OrderItemQuery itemQuery = new OrderItemQuery();
                 itemQuery.createCriteria().andOrderIdEqualTo(order.getOrderId());
                 List<OrderItem> orderItems = orderItemDao.selectByExample(itemQuery);
-                if (orderItems!=null&&orderItems.size()>0){
+                if (orderItems != null && orderItems.size() > 0) {
                     for (OrderItem orderItem : orderItems) {
                         //获取商品名称
                         Goods goods = goodsDao.selectByPrimaryKey(orderItem.getGoodsId());
-                        orderItem.setSpecStr(orderItem.getTitle().replace(goods.getGoodsName(),""));
+                        orderItem.setSpecStr(orderItem.getTitle().replace(goods.getGoodsName(), ""));
                         orderItem.setGoodsName(goods.getGoodsName());
                         orderItem.setIdStr(String.valueOf(orderItem.getId()));
                     }
@@ -165,22 +167,22 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         //查询订单数
-        Page<Order> p=(Page<Order>)orderList;
+        Page<Order> p = (Page<Order>) orderList;
         long total = p.getTotal();
         List<Order> result = p.getResult();
-        return new PageResult(total,result);
+        return new PageResult(total, result);
     }
 
 
     //查询指定订单  张静  2018-12-29
     @Override
     public OrderItemVo selectOrderItemById(Long id) {
-        OrderItemVo vo=new OrderItemVo();
+        OrderItemVo vo = new OrderItemVo();
         OrderItem orderItem = orderItemDao.selectByPrimaryKey(id);
         orderItem.setIdStr(String.valueOf(orderItem.getId()));
         //获取商品名称
         Goods goods = goodsDao.selectByPrimaryKey(orderItem.getGoodsId());
-        orderItem.setSpecStr(orderItem.getTitle().replace(goods.getGoodsName(),""));
+        orderItem.setSpecStr(orderItem.getTitle().replace(goods.getGoodsName(), ""));
         orderItem.setGoodsName(goods.getGoodsName());
         vo.setOrderItem(orderItem);
         Order order = orderDao.selectByPrimaryKey(orderItem.getOrderId());
@@ -189,7 +191,7 @@ public class OrderServiceImpl implements OrderService {
         vo.setCreateTime(order.getCreateTime());
         vo.setPaymentTime(order.getPaymentTime());
         vo.setOrderIdStr(String.valueOf(orderItem.getOrderId()));
-        vo.setPaymentType(order.getPaymentType()=="0"?"微信":"货到付款");
+        vo.setPaymentType(order.getPaymentType() == "0" ? "微信" : "货到付款");
         return vo;
     }
 
@@ -207,13 +209,13 @@ public class OrderServiceImpl implements OrderService {
         payLog.setCreateTime(new Date());
         // 设置支付订单总金额 单位(分)
         double totalPrice = order.getPayment().doubleValue();
-        payLog.setTotalFee((long)(totalPrice*100));
+        payLog.setTotalFee((long) (totalPrice * 100));
         // 设置支付用户
         payLog.setUserId(order.getUserId());
         // 设置支付状态
         payLog.setTradeState("0");
         // 设置订单id集合(字符串)
-        List<Long> list=new ArrayList<>();
+        List<Long> list = new ArrayList<>();
         list.add(order.getOrderId());
         payLog.setOrderList(list.toString().replace("[", "").replace("]", ""));
         // 支付类型
@@ -242,7 +244,7 @@ public class OrderServiceImpl implements OrderService {
         }
         Page<Order> page = (Page<Order>) orderDao.selectByExample(orderQuery);
         List<Order> result = page.getResult();
-        if (null!=result&&result.size()>0){
+        if (null != result && result.size() > 0) {
             for (Order o : result) {
                 o.setOrderIdStr(o.getOrderId().toString());
             }
@@ -254,10 +256,10 @@ public class OrderServiceImpl implements OrderService {
     //查询指定订单 张静 2018-12-30
     @Override
     public List<OrderItem> selectOrderById(Long id) {
-        OrderItemQuery query=new OrderItemQuery();
+        OrderItemQuery query = new OrderItemQuery();
         query.createCriteria().andOrderIdEqualTo(id);
         List<OrderItem> orderItems = orderItemDao.selectByExample(query);
-        if (null!=orderItems&&orderItems.size()>0){
+        if (null != orderItems && orderItems.size() > 0) {
             for (OrderItem orderItem : orderItems) {
                 orderItem.setIdStr(orderItem.getId().toString());
             }
@@ -271,5 +273,112 @@ public class OrderServiceImpl implements OrderService {
     public void updateOrderById(Order order) {
         order.setStatus("4");
         orderDao.updateByPrimaryKeySelective(order);
+    }
+
+    /**
+     * 查询商家订单统计
+     * Author: Mr Liu
+     * Date: 2019/1/2 08:25
+     */
+    @Override
+    public List<Map<String, Object>> getSalesByCategory(String sellerId, Date startDate, Date endDate) {
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        List<Map<String, Object>> pieChart = new ArrayList<>();
+        OrderQuery orderQuery = new OrderQuery();
+        OrderQuery.Criteria criteria = orderQuery.createCriteria();
+        criteria.andSellerIdEqualTo(sellerId).andStatusEqualTo("1").andUpdateTimeBetween(startDate, endDate);
+        try {
+            long nowTime = format1.parse(format1.format(new Date())).getTime();
+            if (endDate.getTime() < nowTime) {
+                if (redisTemplate.opsForValue().get(startDate+sellerId) == null) {
+                    pieChart = getOrderStats(orderQuery, startDate, endDate);
+                    // 如果是已过去的时间,将其查询出来并存至缓存库中
+                    redisTemplate.opsForValue().set(startDate+sellerId, pieChart);
+                } else {
+                    pieChart = (List<Map<String, Object>>) redisTemplate.opsForValue().get(startDate+sellerId);
+                }
+            } else if (endDate.getTime() >= nowTime && startDate.getTime() <= nowTime) {
+                pieChart = getOrderStats(orderQuery, startDate, endDate);
+            } else {
+                pieChart = null;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return pieChart;
+    }
+
+    @Override
+    public List<Map<String, Object>> getSalesByCategory2Operator(Date startDate, Date endDate) {
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        List<Map<String, Object>> pieChart = new ArrayList<>();
+        OrderQuery orderQuery = new OrderQuery();
+        OrderQuery.Criteria criteria = orderQuery.createCriteria();
+        criteria.andStatusEqualTo("1").andUpdateTimeBetween(startDate, endDate);
+        try {
+            long nowTime = format1.parse(format1.format(new Date())).getTime();
+            if (endDate.getTime() < nowTime) {
+                if (redisTemplate.opsForValue().get(startDate) == null) {
+                    pieChart = getOrderStats(orderQuery, startDate, endDate);
+                    // 如果是已过去的时间,将其查询出来并存至缓存库中
+                    redisTemplate.opsForValue().set(startDate, pieChart);
+                } else {
+                    pieChart = (List<Map<String, Object>>) redisTemplate.opsForValue().get(startDate);
+                }
+            } else if (endDate.getTime() >= nowTime && startDate.getTime() <= nowTime) {
+                pieChart = getOrderStats(orderQuery, startDate, endDate);
+            } else {
+                pieChart = null;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return pieChart;
+    }
+
+    /**
+     * 商家订单统计抽取出来的类
+     * Author : Mr Liu
+     * Date : 2019-01-08 20:12
+     */
+    private List<Map<String, Object>> getOrderStats(OrderQuery orderQuery, Date startDate, Date endDate) throws ParseException {
+        List<Map<String, Object>> pieChart = new ArrayList<>();
+        OrderStat orderStat = new OrderStat();
+        List<Order> orders = orderDao.selectByExample(orderQuery);
+        List<OrderStat> orderStats = new ArrayList<>();
+        // 遍历订单项,取出payment和goodsId存至orderStats中
+        for (Order order : orders) {
+            OrderItemQuery orderItemQuery = new OrderItemQuery();
+            orderItemQuery.createCriteria().andOrderIdEqualTo(order.getOrderId());
+            List<OrderItem> orderItems = orderItemDao.selectByExample(orderItemQuery);
+            for (OrderItem orderItem : orderItems) {
+                orderStat.setPayment(orderItem.getTotalFee().doubleValue());
+                orderStat.setGoodsId(orderItem.getGoodsId());
+                orderStats.add(orderStat);
+            }
+        }
+        Set<Long> category1Ids = new HashSet<>();
+        // 遍历orderStats,通过goodsId查询出商品所属的一级分类
+        for (OrderStat stat : orderStats) {
+            Long category1Id = goodsDao.selectcategory1IdByPrimaryKey(stat.getGoodsId());
+            stat.setCategory1Id(category1Id);
+            category1Ids.add(category1Id);
+        }
+        // 遍历一级分类
+        for (Long category1Id : category1Ids) {
+            Map<String, Object> map = new HashMap<>();
+            ItemCat itemCat = itemCatDao.selectByPrimaryKey(category1Id);
+            Double payments = 0.0;
+            for (OrderStat stat : orderStats) {
+                if (stat.getCategory1Id() == category1Id) {
+                    payments += stat.getPayment();
+                }
+            }
+            // 将一级分类的名字作为name,一级分类这段时间的订单总金额作为value存入map中
+            map.put("value", payments);
+            map.put("name", itemCat.getName());
+            pieChart.add(map);
+        }
+        return pieChart;
     }
 }

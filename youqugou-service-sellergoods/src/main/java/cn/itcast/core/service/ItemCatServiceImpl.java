@@ -83,6 +83,7 @@ public class ItemCatServiceImpl implements ItemCatService {
         return itemCatDao.selectByExample(null);
     }
 
+    //-------------------------------
     @Override
     public List<Map> selectItemCatsMapByParentId(Long parentId) {
         List<Map> maps = itemCatDao.selectItemCatsMapByParentId(parentId);

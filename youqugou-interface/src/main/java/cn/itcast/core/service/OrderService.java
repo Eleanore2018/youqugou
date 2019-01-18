@@ -5,7 +5,9 @@ import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderItem;
 import cn.itcast.core.pojogroup.OrderItemVo;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface OrderService {
     void insertOrder(Order order);
@@ -27,4 +29,8 @@ public interface OrderService {
 
     //更新指定id的订单(发货) 张静 2018-12-30
     void updateOrderById(Order order);
+
+    List<Map<String, Object>> getSalesByCategory(String sellerId, Date startDate, Date endDate);
+
+    List<Map<String,Object>> getSalesByCategory2Operator(Date startDate, Date endDate);
 }

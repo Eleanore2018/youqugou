@@ -1,4 +1,4 @@
-app.controller("goodsController", function ($scope, $controller, $location, typeTemplateService, itemCatService, uploadService, goodsService) {
+app.controller("goodsController", function ($scope, $controller, $location,itemService, typeTemplateService, itemCatService, uploadService, goodsService) {
 
     $controller("baseController", {$scope: $scope});//继承
 
@@ -195,6 +195,32 @@ app.controller("goodsController", function ($scope, $controller, $location, type
         });
     });
 
+
+    // 根据品牌id查询商品 张静 2019-01-01
+    $scope.$watch("entity.goods.brandId", function (newValue, oldValue) {
+        goodsService.findGoodsListByBrand(newValue).success(function (response) {
+            $scope.goodsList=response;
+    })
+    });
+
+
+    // 根据id查询库存title 张静 2019-01-02
+    $scope.$watch("entity2.goodsId", function (newValue, oldValue) {
+        itemService.findItemMapByGoodsId(newValue).success(function (response) {
+            $scope.itemList = response;
+        })
+    });
+
+
+  /*  // 用于回显品牌集合
+    $scope.brandList = {data: []};
+    $scope.selectAllBrandMap = function () {
+        brandService.selectAllBrandMap().success(function (response) {
+            $scope.brandList = {data: response};
+        })
+    }*/
+
+
     $scope.updateSpecAttribute = function ($event, name, value) {
         // 调用封装的方法判断 勾选的名称是否存在:
         var object = $scope.searchObjectByKey($scope.entity.goodsDesc.specificationItems, "attributeName", name);
@@ -286,5 +312,17 @@ app.controller("goodsController", function ($scope, $controller, $location, type
                 $scope.itemCatList[response[i].id] = response[i].name;
             }
         });
+    }
+
+
+    //保存秒杀商品 张静 2019-01-01
+    $scope.saveSeckillGoods=function () {
+        goodsService.saveSeckillGoods($scope.entity2).success(function (response) {
+            if (response.flag){
+                alert(response.message);
+            }else{
+                alert(response.message);
+            }
+        })
     }
 });

@@ -1,15 +1,16 @@
+/**
+ * 贾运通--2018/12/31
+ */
 app.service("specificationAuditService", function ($http) {
-    this.searchSpecification = function (currentPage, itemsPerPage, searchEntity) {
+    this.searchSpecificationAudit = function (currentPage, itemsPerPage, searchEntity) {
         return $http.post("../specificationAudit/searchSpecificationAudit.do?pageNum=" + currentPage
             + "&pageSize=" + itemsPerPage, searchEntity);
     }
 
-
-    this.deleteSpecificationVo = function (ids) {
-        return $http.post("../specification/deleteSpecificationVo.do",ids);
+    //状态修改【审核】
+    this.updateStatus = function (ids,status) {
+        return $http.get('../specificationAudit/updateStatus.do?ids='+ids+"&status="+status);
     }
 
-    this.selectAllSpecificationMap = function () {
-        return $http.get("../specification/selectAllSpecificationMap.do");
-    }
+
 });

@@ -13,7 +13,6 @@ app.controller('baseController', function ($scope) {
     $scope.reloadList = function () {
         // 向服务器发出请求查询页数据
         $scope.search($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
-
     }
 
     //提取json字符串数据中某个属性，返回拼接字符串 逗号分隔

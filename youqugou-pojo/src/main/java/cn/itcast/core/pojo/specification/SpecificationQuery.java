@@ -189,6 +189,13 @@ public class SpecificationQuery {
             return (Criteria) this;
         }
 
+        //贾运通 2018/12/31  添加status
+        public Criteria andStatusEqualTo(String value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
+        //结束
+
         public Criteria andSpecNameNotEqualTo(String value) {
             addCriterion("spec_name <>", value, "specName");
             return (Criteria) this;

@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class SpecificationVo implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Specification specification;
     private List<SpecificationOption> specificationOptions;
 
