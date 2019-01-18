@@ -1,0 +1,74 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<script type="text/javascript" src="../js/plugins/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../js/echarts/echarts.min.js"></script>
+<body>
+<div id="main" style="width: 800px;height:600px; margin-left: 200px; margin-top: 60px"></div>
+</body>
+<script type="text/javascript">
+    //初始化echarts
+    function chushihua(myChart){
+
+        option = {
+            xAxis: {
+                type: 'category',
+                data: ['一级活跃', '二级活跃', '三级活跃', '四级活跃', '五级活跃']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: [120, 200, 150, 80, 70],
+                type: 'bar'
+            }]
+        };
+
+        myChart.setOption(option);
+    }
+
+    //从数据库读取数据赋值给echarts
+    function fuzhi(myChart){
+        $.ajax({
+            contentType : "application/json",
+            type : "GET",
+            url : "/userManager/userActive.do",
+            dataType : "json",
+            success : function(data) {
+                //创建一个数组，用来装对象传给series.data，因为series.data里面不能直接鞋for循环
+                //var servicedata=[];
+
+                // for(var i=0;i<data.length;i++){
+                //     var obj=new Object();
+                //     obj.name=data[i].name;
+                //     obj.value=data[i].value;
+                //     servicedata[i]=obj;
+                // }
+
+                myChart.setOption({
+                    xAxis: {
+                        type: 'category',
+                        data: ['一级活跃', '二级活跃', '三级活跃', '四级活跃', '五级活跃']
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        data: data,
+                        type: 'bar'
+                    }]
+
+                });
+
+            }
+        });
+    }
+
+    //初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+    chushihua(myChart);
+    fuzhi(myChart);
+
+</script>
+</html>
