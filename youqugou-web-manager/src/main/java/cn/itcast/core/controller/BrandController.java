@@ -162,7 +162,6 @@ public class BrandController {
             Double idD = new Double(id);
             brand.setId(idD.longValue());
             brand.setName(name);
-            brand.setBirthday(birthday);
             brand.setFirstChar(firstChar);
             brandService.insertOrUpdateBrand(brand);
         }
@@ -212,6 +211,11 @@ public class BrandController {
     @RequestMapping("/searchBrand")
     public PageResult searchBrand(Integer pageNum, Integer pageSize, @RequestBody Brand brand,String name) {
         return brandService.searchBrand(pageNum, pageSize, brand,name);
+    }
+
+    @RequestMapping("/searchBrand")
+    public PageResult searchBrand(Integer pageNum, Integer pageSize, @RequestBody Brand brand) {
+        return brandService.searchBrand(pageNum, pageSize, brand);
     }
 
 

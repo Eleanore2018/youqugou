@@ -336,6 +336,11 @@ public class OrderServiceImpl implements OrderService {
         return pieChart;
     }
 
+    @Override
+    public List<Order> selectAllOrder() {
+        return orderDao.selectByExample(null);
+    }
+
     /**
      * 商家订单统计抽取出来的类
      * Author : Mr Liu

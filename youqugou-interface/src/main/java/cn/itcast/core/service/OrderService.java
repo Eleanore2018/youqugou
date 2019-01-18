@@ -33,4 +33,6 @@ public interface OrderService {
     List<Map<String, Object>> getSalesByCategory(String sellerId, Date startDate, Date endDate);
 
     List<Map<String,Object>> getSalesByCategory2Operator(Date startDate, Date endDate);
+
+    List<Order> selectAllOrder();
 }

@@ -128,11 +128,6 @@ public class User implements Serializable {
      */
     private String town_id;
 
-
-
-
-    private static final long serialVersionUID = 1L;
-
     public String getProvince_id() {
         return province_id;
     }
