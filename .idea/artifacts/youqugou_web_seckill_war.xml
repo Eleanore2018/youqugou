@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="youqugou-web-seckill:war">
+    <output-path>$PROJECT_DIR$/youqugou-web-seckill/target</output-path>
+    <root id="archive" name="youqugou-web-seckill-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="youqugou-web-seckill:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="springdata_demo" />
+        <module name="springdemosolr" />
+        <module name="youqugou-common" />
+        <module name="youqugou-dao" />
+        <module name="youqugou-interface" />
+        <module name="youqugou-pojo" />
+        <module name="youqugou-service-buyer" />
+        <module name="youqugou-service-page" />
+        <module name="youqugou-service-search" />
+        <module name="youqugou-service-sellergoods" />
+        <module name="youqugou-service-user" />
+        <module name="youqugou-web-manager" />
+        <module name="youqugou-web-portal" />
+        <module name="youqugou-web-seckill" />
+        <module name="youqugou-web-shop" />
+        <module name="youqugou-web-user" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="casclient_demo1" target="1.8" />
+      <module name="casclient_demo2" target="1.8" />
+      <module name="freemarker" target="1.8" />
+      <module name="hm_mybatis04_codegenerator" target="1.5" />
+      <module name="itcast_sms" target="1.8" />
+      <module name="jmsDemo" target="1.8" />
+      <module name="spring-demo-solr" target="1.8" />
+      <module name="spring-demo-solrUtil" target="1.8" />
+      <module name="springboot_demo" target="1.8" />
+      <module name="springdata_demo" target="1.5" />
+      <module name="SpringDataRedisDemo" target="1.8" />
+      <module name="springdemosolr" target="1.5" />
+      <module name="youqugou-common" target="1.8" />
+      <module name="youqugou-dao" target="1.8" />
+      <module name="youqugou-interface" target="1.8" />
+      <module name="youqugou-parent" target="1.8" />
+      <module name="youqugou-pojo" target="1.8" />
+      <module name="youqugou-service-buyer" target="1.8" />
+      <module name="youqugou-service-page" target="1.8" />
+      <module name="youqugou-service-search" target="1.8" />
+      <module name="youqugou-service-sellergoods" target="1.8" />
+      <module name="youqugou-service-user" target="1.8" />
+      <module name="youqugou-web-manager" target="1.8" />
+      <module name="youqugou-web-portal" target="1.8" />
+      <module name="youqugou-web-seckill" target="1.8" />
+      <module name="youqugou-web-shop" target="1.8" />
+      <module name="youqugou-web-user" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

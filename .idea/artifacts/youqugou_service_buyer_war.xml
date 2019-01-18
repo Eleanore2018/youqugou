@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="youqugou-service-buyer:war">
+    <output-path>$PROJECT_DIR$/youqugou-service-buyer/target</output-path>
+    <root id="archive" name="youqugou-service-buyer-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="youqugou-service-buyer:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/youqugou-common/youqugou-common.iml" filepath="$PROJECT_DIR$/youqugou-common/youqugou-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/youqugou-dao/youqugou-dao.iml" filepath="$PROJECT_DIR$/youqugou-dao/youqugou-dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/youqugou-interface/youqugou-interface.iml" filepath="$PROJECT_DIR$/youqugou-interface/youqugou-interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/youqugou-parent.iml" filepath="$PROJECT_DIR$/youqugou-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/youqugou-pojo/youqugou-pojo.iml" filepath="$PROJECT_DIR$/youqugou-pojo/youqugou-pojo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/youqugou-service-buyer/youqugou-service-buyer.iml" filepath="$PROJECT_DIR$/youqugou-service-buyer/youqugou-service-buyer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/youqugou-service-page/youqugou-service-page.iml" filepath="$PROJECT_DIR$/youqugou-service-page/youqugou-service-page.iml" />
+      <module fileurl="file://$PROJECT_DIR$/youqugou-service-search/youqugou-service-search.iml" filepath="$PROJECT_DIR$/youqugou-service-search/youqugou-service-search.iml" />
+      <module fileurl="file://$PROJECT_DIR$/youqugou-service-sellergoods/youqugou-service-sellergoods.iml" filepath="$PROJECT_DIR$/youqugou-service-sellergoods/youqugou-service-sellergoods.iml" />
+      <module fileurl="file://$PROJECT_DIR$/youqugou-service-user/youqugou-service-user.iml" filepath="$PROJECT_DIR$/youqugou-service-user/youqugou-service-user.iml" />
+      <module fileurl="file://$PROJECT_DIR$/youqugou-web-manager/youqugou-web-manager.iml" filepath="$PROJECT_DIR$/youqugou-web-manager/youqugou-web-manager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/youqugou-web-portal/youqugou-web-portal.iml" filepath="$PROJECT_DIR$/youqugou-web-portal/youqugou-web-portal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/youqugou-web-seckill/youqugou-web-seckill.iml" filepath="$PROJECT_DIR$/youqugou-web-seckill/youqugou-web-seckill.iml" />
+      <module fileurl="file://$PROJECT_DIR$/youqugou-web-shop/youqugou-web-shop.iml" filepath="$PROJECT_DIR$/youqugou-web-shop/youqugou-web-shop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/youqugou-web-user/youqugou-web-user.iml" filepath="$PROJECT_DIR$/youqugou-web-user/youqugou-web-user.iml" />
+    </modules>
+  </component>
+</project>
