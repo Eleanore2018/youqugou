@@ -1,13 +1,23 @@
 package cn.itcast.core.service;
 
 import cn.itcast.common.util.HttpClient;
+import cn.itcast.core.dao.log.PayLogDao;
+import cn.itcast.core.dao.order.OrderDao;
+import cn.itcast.core.dao.order.OrderItemDao;
 import cn.itcast.core.pojo.log.PayLog;
+import cn.itcast.core.pojo.order.Order;
+import cn.itcast.core.pojo.order.OrderItem;
+import cn.itcast.core.pojo.order.OrderItemQuery;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.wxpay.sdk.WXPayUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +32,14 @@ public class PayServiceImpl implements PayService {
     @Value("${partnerkey}")
     private String partnerkey;
 
+    @Autowired
+    private OrderDao orderDao;
+
+    @Autowired
+    private PayLogDao payLogDao;
+
+    @Autowired
+    private OrderItemDao orderItemDao;
     @Override
     public Map<String, String> createNative(String username) {
         PayLog payLog = (PayLog) redisTemplate.boundHashOps("payLog").get(username);
@@ -128,5 +146,96 @@ public class PayServiceImpl implements PayService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    //订单支付成功,更改数据库的订单的状态  张静
+    @Override
+    public void updatePayLog(String out_trade_no, String transaction_id, String time_end) throws ParseException {
+        PayLog payLog = payLogDao.selectByPrimaryKey(out_trade_no);
+        payLog.setOutTradeNo(out_trade_no);
+        payLog.setTransactionId(transaction_id);
+        payLog.setPayTime(stringToDate(time_end));
+        payLog.setTradeState("1");
+        payLogDao.updateByPrimaryKeySelective(payLog);
+        String orderList = payLog.getOrderList();
+        String[] split = orderList.split(", ");
+        for (String s : split) {
+            Long orderId = Long.parseLong(s);
+            Order order = orderDao.selectByPrimaryKey(orderId);
+            order.setPaymentTime(stringToDate(time_end));
+            order.setStatus("3");//已支付
+            order.setUpdateTime(new Date());
+            orderDao.updateByPrimaryKeySelective(order);
+            OrderItemQuery query=new OrderItemQuery();
+            query.createCriteria().andOrderIdEqualTo(orderId);
+            OrderItem orderItem=new OrderItem();
+            orderItem.setStatus("3");  //已支付
+            orderItemDao.updateByExampleSelective(orderItem,query);
+        }
+        //清楚缓存中的支付日志对象
+        redisTemplate.boundHashOps("payLog").delete(payLog.getUserId());
+    }
+
+    //关闭订单
+    @Override
+    public Map<String, String> closePay(String out_trade_no) {
+        Map<String,String> map=new HashMap<>();
+        //公众账号ID	appid	是	String(32)	wx8888888888888888	微信分配的公众账号ID（企业号corpid即为此appId）
+        map.put("appid", appid);
+        // 商户号	mch_id	是	String(32)	1900000109	微信支付分配的商户号
+        map.put("mch_id",partner);
+        // 商户订单号	out_trade_no	是	String(32)	1217752501201407033233368018	商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*@ ，且在同一个商户号下唯一
+        map.put("out_trade_no",out_trade_no);
+        // 随机字符串	nonce_str	是	String(32)	5K8264ILTKCH16CQ2502SI8ZNMTM67VS	随机字符串，不长于32位。推荐随机数生成算
+        map.put("nonce_str",WXPayUtil.generateNonceStr());
+        // 签名	sign	是	String(32)	C380BEC2BFD727A4B6845133519F3AD6	签名，详见签名生成算法
+        // 签名类型	sign_type	否	String(32)	HMAC-SHA256	签名类型，目前支持HMAC-SHA256和MD5，默认为MD5
+        try {
+            String xml = WXPayUtil.generateSignedXml(map, partnerkey);
+            //获取httpclient对象
+            String url="https://api.mch.weixin.qq.com/pay/closeorder";
+            HttpClient httpClient=new HttpClient(url);
+            //设置https
+            httpClient.setHttps(true);
+            //设置参数
+            httpClient.setXmlParam(xml);
+            //发送post请求
+            httpClient.post();
+            //获取响应结果
+            String content = httpClient.getContent();
+            System.out.println(content);
+            Map<String,String> result=WXPayUtil.xmlToMap(content);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    //关闭订单更改数据库
+    @Override
+    public void updateOrderStatus(String out_trade_no) {
+        PayLog payLog = payLogDao.selectByPrimaryKey(out_trade_no);
+        String orderList = payLog.getOrderList();
+        String[] split = orderList.split(", ");
+        for (String s : split) {
+            Long orderId = Long.parseLong(s);
+            Order order = orderDao.selectByPrimaryKey(orderId);
+            order.setCloseTime(new Date());
+            orderDao.updateByPrimaryKeySelective(order);
+        }
+    }
+
+
+    //字符串转日期 张静
+    private Date stringToDate(String time_end) throws ParseException {
+        DateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String year = time_end.substring(0, 4);
+        String month = time_end.substring(4, 6);
+        String day = time_end.substring(6,8);
+        String hour = time_end.substring(8, 10);
+        String mm = time_end.substring(10, 12);
+        String ss = time_end.substring(12);
+        return format.parse(year + "-" + month + "-" + day + " " + hour + ":" + mm + ":" + ss);
     }
 }

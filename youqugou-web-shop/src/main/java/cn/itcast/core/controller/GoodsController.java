@@ -3,6 +3,7 @@ package cn.itcast.core.controller;
 import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.entity.Result;
 import cn.itcast.core.pojo.good.Goods;
+import cn.itcast.core.pojo.seckill.SeckillGoods;
 import cn.itcast.core.pojogroup.GoodsVo;
 import cn.itcast.core.service.GoodsService;
 import com.alibaba.dubbo.config.annotation.Reference;
@@ -10,6 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/goods")
@@ -71,6 +74,60 @@ public class GoodsController {
         } catch (Exception e) {
             e.printStackTrace();
             return new Result(false, "失败");
+        }
+    }
+
+
+    /*根据品牌id查询商品  张静 2019-01-01*/
+    @RequestMapping("/findGoodsListByBrand")
+    public List<Goods> findGoodsListByBrand(Long id){
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        return goodsService.findGoodsListByBrand(name,id);
+    }
+
+
+    //保存秒杀商品 张静 2019-01-01
+    @RequestMapping("/saveSeckillGoods")
+    public Result saveSeckillGoods(@RequestBody SeckillGoods seckillGoods) {
+        try {
+            goodsService.saveSeckillGoods(seckillGoods);
+            return new Result(true, "添加成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "添加失败!");
+        }
+    }
+    /**
+     * 上架页面生成
+     * 左建洲
+     * @param ids,status
+     * @return
+     */
+    @RequestMapping("/putOnSale")
+    public Result putOnSale(Long[] ids ,String status) {
+        try {
+            goodsService.putOnSale(ids,status);
+            return new Result(true, "上架成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "上架失败,请核对信息");
+        }
+    }
+
+    /**
+     * 下架页面删除
+     * 左建洲
+     * @param ids,status
+     * @return
+     */
+    @RequestMapping("/undercarriage")
+    public Result undercarriage(Long[] ids ,String status) {
+        try {
+            goodsService.undercarriage(ids,status);
+            return new Result(true, "下架成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "下架失败,请核对信息");
         }
     }
 }

@@ -189,6 +189,12 @@ public class TypeTemplateQuery {
             return (Criteria) this;
         }
 
+        /*添加status字段*/
+        public Criteria andStatusEqualTo(String value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
+
         public Criteria andNameNotEqualTo(String value) {
             addCriterion("name <>", value, "name");
             return (Criteria) this;

@@ -1,12 +1,11 @@
 package cn.itcast.core.service;
 
+import cn.itcast.core.dao.collect.CollectDao;
 import cn.itcast.core.dao.item.ItemDao;
-import cn.itcast.core.dao.user.UserDao;
 import cn.itcast.core.pojo.Cart;
+import cn.itcast.core.pojo.Collect;
 import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.order.OrderItem;
-import cn.itcast.core.pojo.user.User;
-import cn.itcast.core.pojo.user.UserQuery;
 import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -22,7 +21,7 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private RedisTemplate redisTemplate;
     @Autowired
-    private UserDao userDao;
+    private CollectDao collectDao;
 
     /**
      * 构建购物车项
@@ -117,21 +116,29 @@ public class CartServiceImpl implements CartService {
             // 3 缓存没数据
             redisTemplate.boundHashOps("cart").put(username, carts);
         }
-
     }
 
     @Override
     public List<Cart> selectCartsFromRedis(String username) {
-        List<Cart> cartList =  fillCarts((List<Cart>) redisTemplate.boundHashOps("cart").get(username));
-        //修改用户登录次数
-        UserQuery userQuery = new UserQuery();
-        UserQuery.Criteria criteria = userQuery.createCriteria();
-        criteria.andUsernameEqualTo(username);
-        List<User> userList = userDao.selectByExample(userQuery);
-        for (User user : userList) {
-            user.setLoginNu(user.getLoginNu()+1);
-            userDao.updateByPrimaryKeySelective(user);
-        }
-        return cartList;
+        return fillCarts((List<Cart>) redisTemplate.boundHashOps("cart").get(username));
+    }
+
+    @Override
+    public void addCollect(Long itemId,String username) {
+
+        Collect collect = new Collect();
+        Item item = itemDao.selectByPrimaryKey(itemId);
+        //商品ID
+        collect.setItemId(itemId);
+        //商品标题
+        collect.setTitle(item.getTitle());
+        //商品图片
+        collect.setImage(item.getImage());
+        //商品价格
+        collect.setPrice(item.getPrice());
+        //用户名称
+        collect.setUserName(username);
+
+        collectDao.insertSelective(collect);
     }
 }

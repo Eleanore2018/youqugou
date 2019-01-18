@@ -194,6 +194,18 @@ public class ItemCatQuery {
             return (Criteria) this;
         }
 
+
+        /**
+         * 添加status字段
+         * @param value
+         * @return
+         */
+        public Criteria andStatusEqualTo(String value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
+        /*结束*/
+
         public Criteria andParentIdGreaterThan(Long value) {
             addCriterion("parent_id >", value, "parentId");
             return (Criteria) this;

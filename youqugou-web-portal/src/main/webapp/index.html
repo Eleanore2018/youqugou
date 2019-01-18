@@ -41,7 +41,7 @@
                         </li>
                     </ul>
                     <ul class="fr">
-                        <li class="f-item">我的订单</li>
+                        <li class="f-item"><a href="home-index.html" target="_blank">我的订单</a></li>
                         <li class="f-item space"></li>
                         <li class="f-item"><a href="home.html" target="_blank">我的品优购</a></li>
                         <li class="f-item space"></li>
@@ -129,7 +129,7 @@
                             <li class="f-item">闪购</li>
                             <li class="f-item">团购</li>
                             <li class="f-item">有趣</li>
-                            <li class="f-item"><a href="seckill-index.html" target="_blank">秒杀</a></li>
+                            <li class="f-item"><a href="http://localhost:9105/seckill-index.html" target="_blank">秒杀</a></li>
                         </ul>
                     </div>
                     <div class="yui3-u Right"></div>
@@ -146,7 +146,7 @@
         <div class="yui3-g SortList ">
             <div class="yui3-u Left all-sort-list" >
                 <div class="all-sort-list2">
-                    <div  class="item {{flag?'hover':''}}" ng-repeat="itemCat1 in itemCatList"
+                    <div class="item" class="item {{flag?'hover':''}}" ng-repeat="itemCat1 in itemCatList"
                          ng-mouseenter="flag=true" ng-mouseleave="flag=false">
 
                         <h3><a href="">{{itemCat1.name}}</a></h3>
@@ -534,7 +534,11 @@
                             <li>滚筒洗衣机</li>
                             <li>电热水器</li>
                         </ul>
+<<<<<<< HEAD
+                        <img src="img/floor-1-1.png"/>
+=======
                         <img src="{{contentFloor.category7.content13.pic}}"/>
+>>>>>>> c7f7b6d10c3b9a34e268306a20ce3530498f8c59
                     </div>
                     <div class="yui3-u row-330 floorBanner">
                         <div id="floorCarousel" data-ride="carousel" data-interval="4000" class="sui-carousel slide">

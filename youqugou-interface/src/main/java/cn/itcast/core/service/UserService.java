@@ -18,4 +18,8 @@ public interface UserService {
     List<Map> userCount();
 
     List<Integer> userActive();
+
+    void addselfCenter(User user);
+
+    User loginInfo(String username);
 }

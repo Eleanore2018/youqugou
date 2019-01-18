@@ -161,4 +161,30 @@ public class UserServiceImpl implements UserService {
         }
         return list;
     }
+
+    // 马超2018.12.30
+    @Override
+    public void addselfCenter(User user) {
+        userDao.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public User loginInfo(String username) {
+        UserQuery userQuery = new UserQuery();
+        userQuery.createCriteria().andUsernameEqualTo(username);
+        List<User> users = userDao.selectByExample(userQuery);
+        if (users!=null&&users.size()>0){
+            return users.get(0);
+        }
+        return null;
+    }
+
+
+//    @Override
+//    public User loginInfo(String username) {
+//
+//
+////        userDao.selectByExample()
+//
+//    }
 }

@@ -115,6 +115,48 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     *  省份
+     */
+    private String province_id;
+    /**
+     *  城市
+     */
+    private String city_id;
+    /**
+     *  区位
+     */
+    private String town_id;
+
+
+
+
+    private static final long serialVersionUID = 1L;
+
+    public String getProvince_id() {
+        return province_id;
+    }
+
+    public void setProvince_id(String province_id) {
+        this.province_id = province_id;
+    }
+
+    public String getCity_id() {
+        return city_id;
+    }
+
+    public void setCity_id(String city_id) {
+        this.city_id = city_id;
+    }
+
+    public String getTown_id() {
+        return town_id;
+    }
+
+    public void setTown_id(String town_id) {
+        this.town_id = town_id;
+    }
+
     public Long getId() {
         return id;
     }
@@ -327,6 +369,10 @@ public class User implements Serializable {
         sb.append(", experienceValue=").append(experienceValue);
         sb.append(", birthday=").append(birthday);
         sb.append(", lastLoginTime=").append(lastLoginTime);
+        sb.append(", province_id=").append(province_id);
+        sb.append(", city_id=").append(city_id);
+        sb.append(", town_id=").append(town_id);
+        sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append(", loginNu=").append(serialVersionUID);
         sb.append("]");

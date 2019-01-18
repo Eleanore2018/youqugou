@@ -19,6 +19,11 @@ public interface BrandService {
 
     int deleteBrandByIds(Long[] ids);
 
+    PageResult searchBrand(Integer pageNum, Integer pageSize, Brand brand, String name);
+
+    /*贾运通*/
+    void updateStatus(Long[] ids, String status);
+
     PageResult searchBrand(Integer pageNum, Integer pageSize, Brand brand);
 
     void insertOrUpdateBrand(Brand brand);

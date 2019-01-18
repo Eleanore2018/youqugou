@@ -16,7 +16,9 @@ public class Brand implements Serializable {
      */
     private String firstChar;
 
-    private Date birthday;
+    private String sellername;
+
+    private String status;
 
     private static final long serialVersionUID = 1L;
 
@@ -44,12 +46,20 @@ public class Brand implements Serializable {
         this.firstChar = firstChar == null ? null : firstChar.trim();
     }
 
-    public Date getBirthday() {
-        return birthday;
+    public String getSellername() {
+        return sellername;
     }
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
+    public void setSellername(String sellername) {
+        this.sellername = sellername == null ? null : sellername.trim();
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
     }
 
     @Override
@@ -61,7 +71,8 @@ public class Brand implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", name=").append(name);
         sb.append(", firstChar=").append(firstChar);
-        sb.append(", birthday=").append(birthday);
+        sb.append(", sellername=").append(sellername);
+        sb.append(", status=").append(status);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
@@ -82,7 +93,8 @@ public class Brand implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
             && (this.getFirstChar() == null ? other.getFirstChar() == null : this.getFirstChar().equals(other.getFirstChar()))
-            && (this.getBirthday() == null ? other.getBirthday() == null : this.getBirthday().equals(other.getBirthday()));
+            && (this.getSellername() == null ? other.getSellername() == null : this.getSellername().equals(other.getSellername()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
     }
 
     @Override
@@ -92,7 +104,8 @@ public class Brand implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
         result = prime * result + ((getFirstChar() == null) ? 0 : getFirstChar().hashCode());
-        result = prime * result + ((getBirthday() == null) ? 0 : getBirthday().hashCode());
+        result = prime * result + ((getSellername() == null) ? 0 : getSellername().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         return result;
     }
 }

@@ -60,10 +60,31 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    public PageResult searchBrand(Integer pageNum, Integer pageSize, Brand brand,String name) {
+        PageHelper.startPage(pageNum, pageSize);
+
+        BrandQuery brandQuery = new BrandQuery();
+        brandQuery.setOrderByClause("status");
+        BrandQuery.Criteria criteria = brandQuery.createCriteria();
+        if (null != brand.getName() && !"".equals(brand.getName().trim())){
+            criteria.andNameLike("%" + brand.getName() + "%");
+        }
+        if (null != brand.getFirstChar() && !"".equals(brand.getFirstChar().trim())) {
+            criteria.andFirstCharEqualTo(brand.getFirstChar());
+        }
+
+        criteria.andSellernameEqualTo(name);
+
+        Page<Brand> page = (Page<Brand>) brandDao.selectByExample(brandQuery);
+        return new PageResult(page.getTotal(), page.getResult());
+    }
+
+    @Override
     public PageResult searchBrand(Integer pageNum, Integer pageSize, Brand brand) {
         PageHelper.startPage(pageNum, pageSize);
 
         BrandQuery brandQuery = new BrandQuery();
+        brandQuery.setOrderByClause("status");
         BrandQuery.Criteria criteria = brandQuery.createCriteria();
         if (null != brand.getName() && !"".equals(brand.getName().trim())){
             criteria.andNameLike("%" + brand.getName() + "%");
@@ -76,6 +97,29 @@ public class BrandServiceImpl implements BrandService {
         return new PageResult(page.getTotal(), page.getResult());
     }
 
+
+
+
+    /*贾运通2018/12/28*/
+    //品牌审核[状态修改]
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        Brand brand = new Brand();
+        brand.setStatus(status);
+        for (Long id : ids) {
+                brand.setId(id);
+                brandDao.updateByPrimaryKeySelective(brand);
+        }
+    }
+
+   /* @Override
+    public PageResult selectBrandAudit(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        BrandQuery brandQuery = new BrandQuery();
+        brandQuery.setOrderByClause("order by status");
+        Page<Brand> page = (Page<Brand>) brandDao.selectByExample(brandQuery);
+        return new PageResult(page.getTotal(), page.getResult());
+    }*/
     @Override
     public void insertOrUpdateBrand(Brand brand) {
         if (brand.getId() == null){

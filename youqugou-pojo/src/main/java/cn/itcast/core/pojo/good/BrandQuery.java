@@ -190,6 +190,27 @@ public class BrandQuery {
             return (Criteria) this;
         }
 
+        /**
+         * 添加一个条件
+         * 贾运通
+         * @param value
+         * @return
+         */
+        public Criteria andStatusEqualTo(String value) {
+            addCriterion("status =", value, "status");
+            return (Criteria) this;
+        }
+        /**
+         * 添加一个条件
+         * 王浩宇
+         * @param sellername
+         * @return
+         */
+        public Criteria andSellernameEqualTo(String sellername) {
+            addCriterion("sellername =", sellername, "sellername");
+            return (Criteria) this;
+        }
+
         public Criteria andNameNotEqualTo(String value) {
             addCriterion("name <>", value, "name");
             return (Criteria) this;

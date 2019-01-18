@@ -85,4 +85,30 @@ app.controller("brandController", function ($controller, $scope, brandService) {
 
 
 
+
+    /*贾运通2018/12/28*/
+    // 显示状态
+    $scope.status = ["未审核", "审核通过", "审核未通过", "关闭"];
+
+    $scope.selectIds = [];
+    $scope.updateSelection = function (event, id) {
+        if (event.target.checked) {
+            $scope.selectIds.push(id);
+        } else {
+            $scope.selectIds.splice($scope.selectIds.indexOf(id), 1);
+        }
+    }
+
+
+    // 审核的方法:
+    $scope.updateStatus = function (status) {
+        brandService.updateStatus($scope.selectIds, status).success(function (response) {
+            if (response.flag) {
+                $scope.reloadList();//刷新列表
+                $scope.selectIds = [];
+            } else {
+                alert(response.message);
+            }
+        });
+    }
 });

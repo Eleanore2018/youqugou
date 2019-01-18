@@ -13,6 +13,19 @@ public class Specification implements Serializable {
      */
     private String specName;
 
+    /*贾运通*/
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    /*结束*/
+
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -31,6 +44,7 @@ public class Specification implements Serializable {
         this.specName = specName == null ? null : specName.trim();
     }
 
+    /*添加status字段--2018/12/31*/
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -39,6 +53,7 @@ public class Specification implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", specName=").append(specName);
+        sb.append(", status=").append(status);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
@@ -57,7 +72,8 @@ public class Specification implements Serializable {
         }
         Specification other = (Specification) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getSpecName() == null ? other.getSpecName() == null : this.getSpecName().equals(other.getSpecName()));
+            && (this.getSpecName() == null ? other.getSpecName() == null : this.getSpecName().equals(other.getSpecName()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
     }
 
     @Override
@@ -66,6 +82,7 @@ public class Specification implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getSpecName() == null) ? 0 : getSpecName().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         return result;
     }
 }

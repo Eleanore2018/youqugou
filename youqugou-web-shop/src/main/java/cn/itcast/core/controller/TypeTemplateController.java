@@ -2,7 +2,6 @@ package cn.itcast.core.controller;
 
 import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.entity.Result;
-import cn.itcast.core.pojo.specification.Specification;
 import cn.itcast.core.pojo.template.TypeTemplate;
 import cn.itcast.core.service.TypeTemplateService;
 import com.alibaba.dubbo.config.annotation.Reference;
@@ -29,4 +28,59 @@ public class TypeTemplateController {
     public List<Map> selectSpecListById(Long id) {
         return typeTemplateService.selectSpecListById(id);
     }
+
+    /**
+     * 王浩宇修改于2018/12/30
+     */
+    //--------------------------------------
+    @RequestMapping("/searchTypeTemplate")
+    public PageResult searchTypeTemplate(Integer pageNum, Integer pageSize, @RequestBody TypeTemplate typeTemplate) {
+        return typeTemplateService.searchTypeTemplate(pageNum, pageSize, typeTemplate);
+    }
+
+    @RequestMapping("/updateTypeTemplate")
+    public Result updateTypeTemplate(@RequestBody TypeTemplate typeTemplate) {
+        typeTemplate.setStatus("0");
+        int row = typeTemplateService.updateTypeTemplate(typeTemplate);
+        if (row > 0) {
+            return new Result(true, "成功");
+        }
+        return new Result(false, "失败");
+    }
+
+    @RequestMapping("/insertTypeTemplate")
+    public Result insertTypeTemplate(@RequestBody TypeTemplate typeTemplate) {
+        typeTemplate.setStatus("0");
+        int row = typeTemplateService.insertTypeTemplate(typeTemplate);
+        if (row > 0) {
+            return new Result(true, "成功");
+        }
+        return new Result(false, "失败");
+    }
+
+    @RequestMapping("/deleteTypeTemplateByIds")
+    public Result deleteTypeTemplateByIds(@RequestBody Long[] ids) {
+        if (ids != null){
+            int row = typeTemplateService.deleteTypeTemplateByIds(ids);
+            if (row > 0) {
+                return new Result(true, "成功");
+            } else {
+                return new Result(false, "失败");
+            }
+        }
+        return new Result(false, "失败");
+    }
+
+    @RequestMapping("/selectAllTypeTemplates")
+    public List<TypeTemplate> selectAllTypeTemplates() {
+        return typeTemplateService.selectAllTypeTemplates();
+    }
+
+    @RequestMapping("/selectAllTypeTemplatesMap")
+    public List<Map> selectAllTypeTemplatesMap() {
+        return typeTemplateService.selectAllTypeTemplatesMap();
+    }
+    //--------------------------------------
+
+
 }

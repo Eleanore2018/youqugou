@@ -27,6 +27,22 @@ public class TypeTemplate implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+
+    /**
+     * 添加status字段- 贾运通-2018/12/31
+     */
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    /*结束*/
+
+
     public Long getId() {
         return id;
     }
@@ -67,6 +83,8 @@ public class TypeTemplate implements Serializable {
         this.customAttributeItems = customAttributeItems == null ? null : customAttributeItems.trim();
     }
 
+
+    /*添加status字段*/
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -79,6 +97,7 @@ public class TypeTemplate implements Serializable {
         sb.append(", brandIds=").append(brandIds);
         sb.append(", customAttributeItems=").append(customAttributeItems);
         sb.append(", serialVersionUID=").append(serialVersionUID);
+        sb.append(", status=").append(status);
         sb.append("]");
         return sb.toString();
     }
@@ -99,7 +118,8 @@ public class TypeTemplate implements Serializable {
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
             && (this.getSpecIds() == null ? other.getSpecIds() == null : this.getSpecIds().equals(other.getSpecIds()))
             && (this.getBrandIds() == null ? other.getBrandIds() == null : this.getBrandIds().equals(other.getBrandIds()))
-            && (this.getCustomAttributeItems() == null ? other.getCustomAttributeItems() == null : this.getCustomAttributeItems().equals(other.getCustomAttributeItems()));
+            && (this.getCustomAttributeItems() == null ? other.getCustomAttributeItems() == null : this.getCustomAttributeItems().equals(other.getCustomAttributeItems()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
     }
 
     @Override
@@ -111,6 +131,7 @@ public class TypeTemplate implements Serializable {
         result = prime * result + ((getSpecIds() == null) ? 0 : getSpecIds().hashCode());
         result = prime * result + ((getBrandIds() == null) ? 0 : getBrandIds().hashCode());
         result = prime * result + ((getCustomAttributeItems() == null) ? 0 : getCustomAttributeItems().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         return result;
     }
 }

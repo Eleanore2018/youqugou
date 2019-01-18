@@ -1,6 +1,17 @@
 //服务层
 app.service('goodsService',function($http){
 
+    //begin:左建洲
+    this.putOnSale=function (ids,status) {
+        return $http.get('../goods/putOnSale.do?ids='+ids+"&status="+status);
+    }
+
+    this.undercarriage=function (ids,status) {
+        return $http.get('../goods/undercarriage.do?ids='+ids+"&status="+status);
+    }
+    //end;
+
+
     //读取列表数据绑定到表单中
     this.findAll=function(){
         return $http.get('../goods/findAll.do');
@@ -28,5 +39,15 @@ app.service('goodsService',function($http){
     //搜索
     this.searchGoodsPage=function(currentPage,itemsPerPage,searchEntity){
         return $http.post('../goods/searchGoodsPage.do?pageNum='+currentPage+"&pageSize="+itemsPerPage, searchEntity);
+    }
+
+    //根据品牌查询商品 张静 2019-01-01
+    this.findGoodsListByBrand=function (id) {
+        return $http.get('../goods/findGoodsListByBrand.do?id='+id);
+    }
+
+    //保存秒杀商品 张静 2019-01-01
+    this.saveSeckillGoods=function (entity) {
+        return $http.post('../goods/saveSeckillGoods.do',entity);
     }
 });

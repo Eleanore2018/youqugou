@@ -2,8 +2,10 @@ package cn.itcast.core.dao.order;
 
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderQuery;
+import cn.itcast.core.pojo.order.OrderStat;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface OrderDao {
@@ -28,4 +30,13 @@ public interface OrderDao {
     int updateByPrimaryKeySelective(Order record);
 
     int updateByPrimaryKey(Order record);
+
+    Object selectOrdersByUserId(String name);
+
+    /**
+     * Author:Mr Liu
+     * Date:2019/1/1
+     * use to query payment list
+     */
+    List<BigDecimal> selectPaymentByExample(OrderQuery orderQuery);
 }
